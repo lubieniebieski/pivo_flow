@@ -1,5 +1,8 @@
-require "pivo_flow/version"
+require 'grit'
+require 'optparse'
+require 'highline'
+require 'fileutils'
+require 'pivotal-tracker'
 
-module PivoFlow
-  # Your code goes here...
-end
+require 'pivo_flow/version'
+require 'pivo_flow/base'

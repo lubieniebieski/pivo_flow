@@ -9,6 +9,9 @@ module PivoFlow
       parse_argv(*args)
     end
 
+    def stories
+      PivoFlow::Pivotal.new.show_stories
+    end
 
     private
 

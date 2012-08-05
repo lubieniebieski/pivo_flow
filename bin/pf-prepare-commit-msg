@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+story_path = 'tmp/.pivotal_story_id'
+if File.exists?(story_path)
+  story_id = File.read(story_path).strip
+  if story_id =~ /(\d{7,})/
+    puts IO.read(ARGV[0])
+    commit_msg = IO.read(ARGV[0])
+    unless commit_msg.include?($1)
+      File.open(ARGV[0], 'w') do |file|
+        file.print commit_msg
+        file.print "[##{$1}]"
+      end
+    end
+  end
+end

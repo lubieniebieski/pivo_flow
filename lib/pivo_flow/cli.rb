@@ -17,6 +17,14 @@ module PivoFlow
       PivoFlow::Pivotal.new.pick_up_story(story_id)
     end
 
+    def finish story_id=nil
+      file_story_path = File.join(Dir.pwd, "/tmp/.pivotal_story_id")
+      if File.exists? file_story_path
+        story_id = File.open(file_story_path).read.strip
+      end
+      PivoFlow::Pivotal.new.finish_story(story_id)
+    end
+
     private
 
     def valid_method? method_name

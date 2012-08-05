@@ -25,6 +25,14 @@ module PivoFlow
       PivoFlow::Pivotal.new.finish_story(story_id)
     end
 
+    def clear
+      file_story_path = File.join(Dir.pwd, "/tmp/.pivotal_story_id")
+      if File.exists? file_story_path
+        FileUtils.remove_file(file_story_path)
+      end
+      puts "Current pivotal story id cleared."
+    end
+
     private
 
     def valid_method? method_name

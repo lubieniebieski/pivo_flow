@@ -21,11 +21,13 @@ module PivoFlow
 
     def parse_argv(*args)
       command = args.first.split.first
+      args = args.slice(1..-1)
+
       unless valid_method?(command)
         puts "Ups, no such method..."
         exit 1
       end
-      send(command)
+      send(command, *args)
       exit 0
     end
 

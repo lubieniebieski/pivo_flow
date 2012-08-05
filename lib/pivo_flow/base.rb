@@ -5,9 +5,9 @@ module PivoFlow
 
     def initialize(*args)
       @options = {}
-      current_dir = Dir.pwd
-      return "no GIT (#{GIT_DIR}) directory found" unless File.directory?(File.join(current_dir, GIT_DIR))
-      git_dir = File.join(current_dir, GIT_DIR)
+      @current_dir = Dir.pwd
+      return "no GIT (#{GIT_DIR}) directory found" unless File.directory?(File.join(@current_dir, GIT_DIR))
+      git_dir = File.join(@current_dir, GIT_DIR)
       @options[:repository] = Grit::Repo.new(git_dir)
       git_config_ok? ? parse_git_config : add_git_config
       run

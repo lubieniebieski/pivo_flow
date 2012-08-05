@@ -33,21 +33,30 @@ module PivoFlow
         menu.header = "--- STORIES FROM PIVOTAL TRACKER ---\nWhich one would you like to start?   "
         menu.prompt = "story no.? "
         menu.select_by = :index
-        stories.each { |story| menu.choice("[##{story.id}] (requested by: #{story.requested_by}) #{story.name}\n\t#{story.description}") { |answer| puts "thanks for picking ##{answer.match(/\[#(?<id>\d+)\]/)[:id]}"} }
+        stories.each do |story|
+          vars = {
+            story_id: story.id,
+            requested_by: story.requested_by,
+            name: story.name,
+            estimate: story.estimate < 0 ? "?" : story.estimate
+          }
+          story_text = "[#%{story_id}] [%{estimate} pts.] (requested by: %{requested_by}) %{name}" % vars
+          story_text += "\n   Description: #{story.description}" unless story.description.empty?
+          menu.choice(story_text) { |answer| puts "thanks for picking ##{answer.match(/\[#(?<id>\d+)\]/)[:id]}"}
+        end
       end
-
     end
 
     def show_stories
-      stories = user_stories
+      stories = user_stories + unasigned_stories
       if stories.count.zero?
         puts "hmm... there is no story assigned to you! I'll better check for unasigned stories!"
         stories = unasigned_stories
       end
-      list_stories_to_output stories.last(5)
+      list_stories_to_output stories.first(10)
     end
 
-    def fetch_stories(count = 100, state = "unstarted")
+    def fetch_stories(count = 100, state = "unstarted,unscheduled")
       conditions = { current_state: state, limit: count }
       @options[:stories] = @options[:project].stories.all(conditions)
     end

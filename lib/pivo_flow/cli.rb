@@ -13,6 +13,10 @@ module PivoFlow
       PivoFlow::Pivotal.new.show_stories
     end
 
+    def start story_id
+      PivoFlow::Pivotal.new.pick_up_story(story_id)
+    end
+
     private
 
     def valid_method? method_name

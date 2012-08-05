@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module PivoFlow
   class Pivotal < Base
 
@@ -38,12 +39,30 @@ module PivoFlow
             story_id: story.id,
             requested_by: story.requested_by,
             name: story.name,
-            estimate: story.estimate < 0 ? "?" : story.estimate
+            story_type: story_type_icon(story),
+            estimate: estimate_points(story)
           }
-          story_text = "[#%{story_id}] [%{estimate} pts.] (requested by: %{requested_by}) %{name}" % vars
-          story_text += "\n   Description: #{story.description}" unless story.description.empty?
-          menu.choice(story_text) { |answer| puts "thanks for picking ##{answer.match(/\[#(?<id>\d+)\]/)[:id]}"}
+          story_text = "[#%{story_id}] %{story_type} [%{estimate} pts.] (requested by: %{requested_by}) %{name}" % vars
+          story_text += "\n   Description: #{story.description}" unless story.description
+          menu.choice(story_text) { |answer| pick_up_story(answer.match(/\[#(?<id>\d+)\]/)[:id])}
         end
+      end
+    end
+
+    def story_type_icon story
+      case story.story_type
+        when "feature" then "☆"
+        when "bug" then "☠"
+        when "chore" then "✙"
+        else "☺"
+      end
+    end
+
+    def estimate_points story
+      unless story.estimate.nil?
+        story.estimate < 0 ? "?" : story.estimate
+      else
+        "no"
       end
     end
 

@@ -7,10 +7,38 @@ module PivoFlow
       @options = {}
       @current_dir = Dir.pwd
       return "no GIT (#{GIT_DIR}) directory found" unless File.directory?(File.join(@current_dir, GIT_DIR))
-      git_dir = File.join(@current_dir, GIT_DIR)
-      @options[:repository] = Grit::Repo.new(git_dir)
+
+      # paths
+      @git_dir = File.join(@current_dir, GIT_DIR)
+      @git_hook_path = File.join(@git_dir, 'hooks', 'prepare-commit-msg')
+      @pf_git_hook_name = 'pf-prepare-commit-msg'
+      @pf_git_hook_path = File.join(@git_dir, 'hooks', @pf_git_hook_name)
+
+      @options[:repository] = Grit::Repo.new(@git_dir)
+      install_git_hook if git_hook_needed?
       git_config_ok? ? parse_git_config : add_git_config
       run
+    end
+
+    def git_hook_needed?
+      !File.executable?(@git_hook_path) || !File.read(@git_hook_path).match(/\.\/#{@pf_git_hook_name}/)
+    end
+
+    def install_git_hook
+      puts "Installing prepare-commit-msg hook..."
+      hook_path = File.join(File.dirname(__FILE__), '..', '..', 'bin', @pf_git_hook_name)
+      FileUtils.cp(hook_path, @pf_git_hook_path, preserve: true)
+      puts "File copied..."
+      unless File.read(@git_hook_path).match(/\.\/#{@pf_git_hook_name}/)
+        File.open(@git_hook_path, "a") { |f| f.puts("./#{@pf_git_hook_name}") }
+        puts "Reference to pf-prepare-commit-msg added to prepare-commit-msg..."
+      end
+      unless File.executable?(@git_hook_path)
+        FileUtils.chmod 0755, @git_hook_path unless
+        puts "Chmod on #{@git_hook_path} set to 755"
+      end
+
+      puts "Success!\n"
     end
 
     def run

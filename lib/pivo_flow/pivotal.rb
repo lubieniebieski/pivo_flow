@@ -3,6 +3,10 @@ module PivoFlow
   class Pivotal < Base
 
     def run
+      @story_id_file_name = ".pivotal_story_id"
+      @story_id_tmp_path = File.join(@current_dir, "/tmp")
+      @story_id_file_path = File.join(@story_id_tmp_path, @story_id_file_name)
+
       return 1 unless @options["api-token"] && @options["project-id"]
       PivotalTracker::Client.token = @options["api-token"]
       PivotalTracker::Client.use_ssl = true
@@ -92,10 +96,8 @@ module PivoFlow
     end
 
     def save_story_id_to_file story_id
-      tmp_path = File.join(@current_dir, "/tmp")
-      story_file = ".pivotal_story_id"
-      FileUtils.mkdir_p(tmp_path)
-      File.open(File.join(tmp_path, story_file), 'w') { |f| f.write(story_id) }
+      FileUtils.mkdir_p(@story_id_tmp_path)
+      File.open(@story_id_file_path, 'w') { |f| f.write(story_id) }
     end
 
     def show_stories

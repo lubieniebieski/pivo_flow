@@ -34,6 +34,11 @@ module PivoFlow
     end
 
     def list_stories_to_output stories
+      if current_story
+        puts "You've got some started stories, it may be a good idea to finish them in the first place"
+        puts "[##{current_story.id}] #{current_story.name} - #{current_story.description}"
+      end
+
       HighLine.new.choose do |menu|
         menu.header = "--- STORIES FROM PIVOTAL TRACKER ---\nWhich one would you like to start?   "
         menu.prompt = "story no.? "
@@ -93,6 +98,12 @@ module PivoFlow
       update_story(story_id, :started)
     end
 
+    def finish_story story_id
+      remove_story_id_file if story_id.nil? or update_story(story_id, :finished)
+    end
+
+    def remove_story_id_file
+      FileUtils.remove_file(@story_id_file_path)
     end
 
     def save_story_id_to_file story_id

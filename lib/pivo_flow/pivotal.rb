@@ -47,6 +47,34 @@ module PivoFlow
       end
     end
 
+    def pick_up_story story_id
+      save_story_id_to_file(story_id) if start_story(story_id)
+    end
+
+    def start_story story_id
+      story = @options[:project].stories.find(story_id)
+      if story.nil?
+        puts "Story not found, sorry."
+        nil
+      end
+      if story.update(owned_by: user_name, current_state: :started).errors.count.zero?
+        puts "Story updated in Pivotal Tracker"
+      else
+        error_message = "ERROR"
+        error_message += ": #{story.errors.first}"
+        puts error_message
+        nil
+      end
+
+    end
+
+    def save_story_id_to_file story_id
+      tmp_path = File.join(@current_dir, "/tmp")
+      story_file = ".pivotal_story_id"
+      FileUtils.mkdir_p(tmp_path)
+      File.open(File.join(tmp_path, story_file), 'w') { |f| f.write(story_id) }
+    end
+
     def show_stories
       stories = user_stories + unasigned_stories
       if stories.count.zero?

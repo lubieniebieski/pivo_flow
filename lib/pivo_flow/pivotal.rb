@@ -70,20 +70,24 @@ module PivoFlow
       save_story_id_to_file(story_id) if start_story(story_id)
     end
 
-    def start_story story_id
+    def update_story story_id, state
       story = @options[:project].stories.find(story_id)
       if story.nil?
         puts "Story not found, sorry."
-        nil
       end
-      if story.update(owned_by: user_name, current_state: :started).errors.count.zero?
+      if story.update(owned_by: user_name, current_state: state).errors.count.zero?
         puts "Story updated in Pivotal Tracker"
+        true
       else
         error_message = "ERROR"
         error_message += ": #{story.errors.first}"
         puts error_message
-        nil
       end
+    end
+
+    def start_story story_id
+      update_story(story_id, :started)
+    end
 
     end
 

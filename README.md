@@ -18,7 +18,26 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+All the required information is gathered on demand, but it's a good idea to prepare:
+
+* project's Pivotal Tracker ID
+* your Pivotal Tracker API token
+
+Get list of current stories
+
+    pf stories
+
+Start story with given ID
+
+    pf start STORY_ID
+
+Finish current story [or given story ID]
+
+    pf finish [STORY_ID]
+
+Clear current story without notifying Pivotal
+
+    pf clear
 
 ## Contributing
 

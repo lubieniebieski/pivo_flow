@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["lubieniebieski@gmail.com"]
   gem.description   = %q{Automated querying for pivotal stories, adding story id to commit message, etc.}
   gem.summary       = %q{Simple pivotal tracker integration for day to day work with git}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/lubieniebieski/pivo_flow"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

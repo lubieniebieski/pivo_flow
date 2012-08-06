@@ -29,8 +29,8 @@ module PivoFlow
       hook_path = File.join(File.dirname(__FILE__), '..', '..', 'bin', @pf_git_hook_name)
       FileUtils.cp(hook_path, @pf_git_hook_path, preserve: true)
       puts "File copied..."
-      unless File.read(@git_hook_path).match(/\.\/#{@pf_git_hook_name}/)
-        File.open(@git_hook_path, "a") { |f| f.puts("./#{@pf_git_hook_name}") }
+      unless File.exists?(@git_hook_path) && File.read(@git_hook_path).match(/\.\/#{@pf_git_hook_name}/)
+        File.open(@git_hook_path, "a") { |f| f.puts("./#{@pf_git_hook_path} $1") }
         puts "Reference to pf-prepare-commit-msg added to prepare-commit-msg..."
       end
       unless File.executable?(@git_hook_path)

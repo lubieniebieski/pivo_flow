@@ -39,6 +39,10 @@ Clear current story without notifying Pivotal
 
     pf clear
 
+## Git-hooks
+
+This gem installs a `pepare-commit-msg` hook by adding a reference to `pf-prepare-commit-msg` file. In short: you shouldn't be worried about your own `prepare-commit-msg` hook, the one added by `pivo_flow` will be added in the last line of original hook file.
+
 ## Contributing
 
 1. Fork it

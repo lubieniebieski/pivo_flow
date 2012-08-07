@@ -72,10 +72,48 @@ module PivoFlow
       end
     end
 
+    def show_story story_id
+      story = find_story(story_id)
+      puts story_string(story, true)
+      proceed = ask_question "Do you want to start this story?"
+      accepted_answers = %w[yes y sure ofc jup yep yup ja tak]
+      if accepted_answers.include?(proceed.downcase)
+        pick_up_story(story_id)
+      else
+        show_stories
+      end
+    end
+
     def find_story story_id
       story = project_stories.find { |p| p.id == story_id }
       story.nil? ? @options[:project].stories.find(story_id) : story
     end
+
+    def story_string story, long=false
+      vars = {
+        story_id: story.id,
+        requested_by: story.requested_by,
+        name: truncate(story.name),
+        story_type: story_type_icon(story),
+        estimate: estimate_points(story),
+        owner: story_owner(story),
+        description: story.description,
+        labels: story.labels,
+        started: story.current_state == "started" ? "S" : "N"
+      }
+      if long
+        "STORY %{started} %{story_type} [#%{story_id}]
+        Name: %{name}
+        Labels: %{labels}
+        Owned by: %{owner}
+        Requested by: %{requested_by}
+        Description: %{description}
+        Estimate: %{estimate}" % vars
+      else
+        "[#%{story_id}] (%{started}) %{story_type} [%{estimate} pts.] %{owner} %{name}" % vars
+      end
+    end
+
     def story_type_icon story
       case story.story_type
         when "feature" then "☆"
@@ -83,6 +121,10 @@ module PivoFlow
         when "chore" then "✙"
         else "☺"
       end
+    end
+
+    def truncate string
+      string.length > 80 ? "#{string[0..80]}..." : string
     end
 
     def story_owner story

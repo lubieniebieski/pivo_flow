@@ -10,7 +10,15 @@ module PivoFlow
       return 1 unless @options["api-token"] && @options["project-id"]
       PivotalTracker::Client.token = @options["api-token"]
       PivotalTracker::Client.use_ssl = true
-      @options[:project] ||= PivotalTracker::Project.find(@options["project-id"])
+
+      begin
+        @options[:project] ||= PivotalTracker::Project.find(@options["project-id"])
+      rescue RestClient::Unauthorized => e
+        puts "[ERROR] Pivotal Tracker: #{e}\n"
+        puts "[TIPS] It means that your configuration is wrong. You can reset your settings by running:\npf reconfig"
+        exit(1)
+      end
+
     end
 
     def user_stories

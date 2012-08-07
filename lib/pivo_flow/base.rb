@@ -1,12 +1,17 @@
 module PivoFlow
   class Base
     GIT_DIR = '.git'
-    KEYS_TO_CHECK = ["test-pivotal.project-id", "test-pivotal.api-token"]
+    KEYS_TO_CHECK = ["pivo_flow-pivotal.project-id", "pivo_flow-pivotal.api-token"]
 
     def initialize(*args)
       @options = {}
       @current_dir = Dir.pwd
-      return "no GIT (#{GIT_DIR}) directory found" unless File.directory?(File.join(@current_dir, GIT_DIR))
+
+      # exit if no git repo found
+      unless File.directory?(File.join(@current_dir, GIT_DIR))
+        puts("no GIT (#{GIT_DIR}) directory found")
+        exit(1)
+      end
 
       # paths
       @git_dir = File.join(@current_dir, GIT_DIR)
@@ -15,6 +20,7 @@ module PivoFlow
       @pf_git_hook_path = File.join(@git_dir, 'hooks', @pf_git_hook_name)
       @pf_git_hook_cmd = "#{@pf_git_hook_path} $1"
       @options[:repository] = Grit::Repo.new(@git_dir)
+
       install_git_hook if git_hook_needed?
       git_config_ok? ? parse_git_config : add_git_config
       run

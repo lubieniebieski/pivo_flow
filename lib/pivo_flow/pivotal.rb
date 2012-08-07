@@ -97,7 +97,9 @@ module PivoFlow
       story = @options[:project].stories.find(story_id)
       if story.nil?
         puts "Story not found, sorry."
+        return
       end
+      state = :accepted if story.story_type == "chore" && state == :finished
       if story.update(owned_by: user_name, current_state: state).errors.count.zero?
         puts "Story updated in Pivotal Tracker"
         true

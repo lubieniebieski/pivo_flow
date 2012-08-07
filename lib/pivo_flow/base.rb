@@ -1,11 +1,22 @@
 module PivoFlow
+
+  # This class is responsible for setting up the project environment
+  #
+  # * saving Pivotal Tracker API token and project ID in git repository config
+  # * installing git hook
+
   class Base
+
+    # Git repository directory
     GIT_DIR = '.git'
+    # Keys used by gem in git config, with corresponding questions which are
+    # used during project setup
     KEYS_AND_QUESTIONS = {
       "pivo-flow.project-id"  => "Pivotal: what is your project's ID?",
       "pivo-flow.api-token"   => "Pivotal: what is your pivotal tracker api-token?"
     }
 
+    # Basic initialize method
     def initialize(*args)
       @options = {}
       @current_dir = Dir.pwd
@@ -29,9 +40,15 @@ module PivoFlow
       run
     end
 
+    # Check if git hook is already installed
     def git_hook_needed?
       !File.executable?(@git_hook_path) || !File.read(@git_hook_path).match(/#{@pf_git_hook_name} \$1/)
     end
+
+    # Install git hook
+    # Copy hook to <tt>.git/hooks</tt> directory and add a reference to this
+    # executable file within <tt>prepare-commit-msg</tt> hook (it may be
+    # helpful if user has his custom hooks)
 
     def install_git_hook
       puts "Installing prepare-commit-msg hook..."
@@ -50,13 +67,17 @@ module PivoFlow
       puts "Success!\n"
     end
 
+    # This method is fired after initialization and should be overwritten by
+    # subclasses
     def run
     end
 
+    # Get full user name from git config, i.e. Adam Newman
     def user_name
       @options[:user_name] ||= @options[:repository].config['pivotal.full-name'] || @options[:repository].config['user.name']
     end
 
+    # Setup project by entering Pivotal <tt>api-token</tt> and Pivotal Tracker <tt>project_id</tt>
     def reconfig
       KEYS_AND_QUESTIONS.each do |key, question|
         ask_question_and_force_update_config(question, key)

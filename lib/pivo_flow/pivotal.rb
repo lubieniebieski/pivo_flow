@@ -53,9 +53,11 @@ module PivoFlow
             requested_by: story.requested_by,
             name: story.name,
             story_type: story_type_icon(story),
-            estimate: estimate_points(story)
+            estimate: estimate_points(story),
+            owner: story_owner(story),
+            started: story.current_state == "started" ? "started >" : ""
           }
-          story_text = "[#%{story_id}] %{story_type} [%{estimate} pts.] (requested by: %{requested_by}) %{name}" % vars
+          story_text = "%{started} [#%{story_id}] %{story_type} [%{estimate} pts.] %{owner} %{name}" % vars
           story_text += "\n   Description: #{story.description}" unless story.description
           menu.choice(story_text) { |answer| pick_up_story(answer.match(/\[#(?<id>\d+)\]/)[:id])}
         end
@@ -69,6 +71,14 @@ module PivoFlow
         when "chore" then "✙"
         else "☺"
       end
+    end
+
+    def story_owner story
+      story.owned_by.nil? ? "" : "(#{initials(story.owned_by)})"
+    end
+
+    def initials name
+      name.split.map{ |n| n[0]}.join
     end
 
     def estimate_points story

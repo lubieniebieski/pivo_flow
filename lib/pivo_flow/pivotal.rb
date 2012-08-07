@@ -72,6 +72,10 @@ module PivoFlow
       end
     end
 
+    def find_story story_id
+      story = project_stories.find { |p| p.id == story_id }
+      story.nil? ? @options[:project].stories.find(story_id) : story
+    end
     def story_type_icon story
       case story.story_type
         when "feature" then "☆"
@@ -102,7 +106,7 @@ module PivoFlow
     end
 
     def update_story story_id, state
-      story = @options[:project].stories.find(story_id)
+      story = find_story(story_id)
       if story.nil?
         puts "Story not found, sorry."
         return

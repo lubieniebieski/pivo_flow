@@ -3,36 +3,36 @@ module PivoFlow
 
     def initialize *args
       if args.length.zero?
-        puts "You forgot method name"
+        no_method_error
         exit 1
       end
+      # catch interrupt signal (CTRL+C)
       Signal.trap(2) {
         puts "\nkkthxbye!"
-        exit(0)
+        exit 0
       }
+      @file_story_path = File.join(Dir.pwd, "/tmp/.pivotal_story_id")
       parse_argv(*args)
     end
 
     def stories
-      PivoFlow::Pivotal.new.show_stories
+      pivotal_object.show_stories
     end
 
     def start story_id
-      PivoFlow::Pivotal.new.pick_up_story(story_id)
+      pivotal_object.pick_up_story(story_id)
     end
 
     def finish story_id=nil
-      file_story_path = File.join(Dir.pwd, "/tmp/.pivotal_story_id")
-      if File.exists? file_story_path
-        story_id = File.open(file_story_path).read.strip
+      if File.exists? @file_story_path
+        story_id = File.open(@file_story_path).read.strip
       end
-      PivoFlow::Pivotal.new.finish_story(story_id)
+      pivotal_object.finish_story(story_id)
     end
 
     def clear
-      file_story_path = File.join(Dir.pwd, "/tmp/.pivotal_story_id")
-      if File.exists? file_story_path
-        FileUtils.remove_file(file_story_path)
+      if File.exists? @file_story_path
+        FileUtils.remove_file(@file_story_path)
       end
       puts "Current pivotal story id cleared."
     end
@@ -47,6 +47,18 @@ module PivoFlow
 
     private
 
+    def pivotal_object
+      @pivotal_object ||= PivoFlow::Pivotal.new
+    end
+
+    def no_method_error
+      puts "You forgot method name"
+    end
+
+    def invalid_method_error
+      puts "Ups, no such method..."
+    end
+
     def valid_method? method_name
       self.methods.include? method_name.to_sym
     end
@@ -56,11 +68,10 @@ module PivoFlow
       args = args.slice(1..-1)
 
       unless valid_method?(command)
-        puts "Ups, no such method..."
-        exit 1
+        invalid_method_error
+        exit(1)
       end
       send(command, *args)
-      exit 0
     end
 
   end

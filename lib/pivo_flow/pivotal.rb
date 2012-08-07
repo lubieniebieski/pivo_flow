@@ -46,28 +46,12 @@ module PivoFlow
     end
 
     def list_stories_to_output stories
-      if current_story
-        puts "You've got some started stories, it may be a good idea to finish them in the first place"
-        puts "[##{current_story.id}] #{current_story.name} - #{current_story.description}"
-      end
-
       HighLine.new.choose do |menu|
-        menu.header = "--- STORIES FROM PIVOTAL TRACKER ---\nWhich one would you like to start?   "
+        menu.header = "\n--- STORIES FROM PIVOTAL TRACKER ---\nWhich one would you like to start?   "
         menu.prompt = "story no.? "
         menu.select_by = :index
         stories.each do |story|
-          vars = {
-            story_id: story.id,
-            requested_by: story.requested_by,
-            name: story.name,
-            story_type: story_type_icon(story),
-            estimate: estimate_points(story),
-            owner: story_owner(story),
-            started: story.current_state == "started" ? "started >" : ""
-          }
-          story_text = "%{started} [#%{story_id}] %{story_type} [%{estimate} pts.] %{owner} %{name}" % vars
-          story_text += "\n   Description: #{story.description}" unless story.description
-          menu.choice(story_text) { |answer| pick_up_story(answer.match(/\[#(?<id>\d+)\]/)[:id])}
+          menu.choice(story_string(story)) { |answer| show_story(answer.match(/\[#(?<id>\d+)\]/)[:id])}
         end
       end
     end
@@ -83,6 +67,7 @@ module PivoFlow
         show_stories
       end
     end
+
 
     def find_story story_id
       story = project_stories.find { |p| p.id == story_id }
@@ -128,7 +113,7 @@ module PivoFlow
     end
 
     def story_owner story
-      story.owned_by.nil? ? "" : "(#{initials(story.owned_by)})"
+      story.owned_by.nil? ? "(--)" : "(#{initials(story.owned_by)})"
     end
 
     def initials name
@@ -139,7 +124,7 @@ module PivoFlow
       unless story.estimate.nil?
         story.estimate < 0 ? "?" : story.estimate
       else
-        "no"
+        "-"
       end
     end
 

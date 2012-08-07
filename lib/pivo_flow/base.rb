@@ -51,11 +51,17 @@ module PivoFlow
     end
 
     def run
-      raise "you should define run!"
     end
 
     def user_name
       @options[:user_name] ||= @options[:repository].config['pivotal.full-name'] || @options[:repository].config['user.name']
+    end
+
+    def reconfig
+      KEYS_AND_QUESTIONS.each do |key, question|
+        ask_question_and_force_update_config(question, key)
+      end
+      puts "[SUCCESS] Pivotal Tracker configuration has been updated."
     end
 
     private

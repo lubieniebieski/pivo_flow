@@ -33,6 +33,9 @@ module PivoFlow
       puts "Current pivotal story id cleared."
     end
 
+    def reconfig
+      PivoFlow::Base.new.reconfig
+    end
     private
 
     def valid_method? method_name

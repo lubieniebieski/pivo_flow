@@ -6,6 +6,10 @@ module PivoFlow
         puts "You forgot method name"
         exit 1
       end
+      Signal.trap(2) {
+        puts "\nkkthxbye!"
+        exit(0)
+      }
       parse_argv(*args)
     end
 
@@ -36,6 +40,11 @@ module PivoFlow
     def reconfig
       PivoFlow::Base.new.reconfig
     end
+
+    def version
+      puts PivoFlow::VERSION
+    end
+
     private
 
     def valid_method? method_name

@@ -1,7 +1,10 @@
 module PivoFlow
   class Base
     GIT_DIR = '.git'
-    KEYS_TO_CHECK = ["pivo_flow-pivotal.project-id", "pivo_flow-pivotal.api-token"]
+    KEYS_AND_QUESTIONS = {
+      "pivo-flow.project-id"  => "Pivotal: what is your project's ID?",
+      "pivo-flow.api-token"   => "Pivotal: what is your pivotal tracker api-token?"
+    }
 
     def initialize(*args)
       @options = {}
@@ -58,17 +61,18 @@ module PivoFlow
     private
 
     def git_config_ok?
-      !KEYS_TO_CHECK.any? { |key| @options[:repository].config[key].nil? }
+      !KEYS_AND_QUESTIONS.keys.any? { |key| @options[:repository].config[key].nil? }
     end
 
     def add_git_config
-      ask_question_and_update_config "Pivotal: what is your project's ID?", "test-pivotal.project-id"
-      ask_question_and_update_config "Pivotal: what is your pivotal tracker api-token?", "test-pivotal.api-token"
+      KEYS_AND_QUESTIONS.each do |key, question|
+        ask_question_and_update_config(question, key)
+      end
       parse_git_config
     end
 
     def parse_git_config
-      KEYS_TO_CHECK.each do |key|
+      KEYS_AND_QUESTIONS.each do |key, value|
         new_key = key.split(".").last
         @options[new_key] = @options[:repository].config[key]
       end
@@ -76,6 +80,10 @@ module PivoFlow
 
     def ask_question_and_update_config question, variable
       @options[:repository].config[variable] ||= ask_question(question)
+    end
+
+    def ask_question_and_force_update_config question, variable
+      @options[:repository].config[variable] = ask_question(question)
     end
 
     def ask_question question, first_answer = nil

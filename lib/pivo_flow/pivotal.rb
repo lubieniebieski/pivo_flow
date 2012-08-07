@@ -21,6 +21,10 @@ module PivoFlow
       @options[:stories] ||= fetch_stories
     end
 
+    def other_users_stories
+      project_stories.select{ |story| story.owned_by != user_name }
+    end
+
     def unasigned_stories
       project_stories.select{ |story| story.owned_by == nil }
     end
@@ -112,15 +116,11 @@ module PivoFlow
     end
 
     def show_stories
-      stories = user_stories + unasigned_stories
-      if stories.count.zero?
-        puts "hmm... there is no story assigned to you! I'll better check for unasigned stories!"
-        stories = unasigned_stories
-      end
-      list_stories_to_output stories.first(10)
+      stories = user_stories + other_users_stories
+      list_stories_to_output stories.first(9)
     end
 
-    def fetch_stories(count = 100, state = "unstarted,unscheduled")
+    def fetch_stories(count = 100, state = "unstarted,started,unscheduled")
       conditions = { current_state: state, limit: count }
       @options[:stories] = @options[:project].stories.all(conditions)
     end

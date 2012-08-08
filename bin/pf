@@ -4,5 +4,5 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'pivo_flow'
 
-exit PivoFlow::Cli.new(*ARGV)
+exit PivoFlow::Cli.new(*ARGV).go!
 

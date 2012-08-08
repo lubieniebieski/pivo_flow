@@ -2,17 +2,21 @@ module PivoFlow
   class Cli
 
     def initialize *args
-      if args.length.zero?
+      @file_story_path = File.join(Dir.pwd, "/tmp/.pivotal_story_id")
+      @args = args
+    end
+
+    def go!
+      if @args.empty?
         no_method_error
-        exit 1
+        return 1
       end
       # catch interrupt signal (CTRL+C)
       Signal.trap(2) {
         puts "\nkkthxbye!"
-        exit 0
+        return 0
       }
-      @file_story_path = File.join(Dir.pwd, "/tmp/.pivotal_story_id")
-      parse_argv(*args)
+      return parse_argv(@args)
     end
 
     def stories
@@ -63,16 +67,16 @@ module PivoFlow
       self.methods.include? method_name.to_sym
     end
 
-    def parse_argv(*args)
-      command = args.first.split.first
+    def parse_argv(args)
+      command = args.first
       args = args.slice(1..-1)
 
       unless valid_method?(command)
         invalid_method_error
-        exit(1)
+        return(1)
       end
       send(command, *args)
-      exit(0)
+      return(0)
     end
 
   end

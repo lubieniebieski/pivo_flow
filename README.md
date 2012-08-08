@@ -1,5 +1,7 @@
 # PivoFlow
 
+[![Build Status](https://secure.travis-ci.org/hybridgroup/taskmapper.png?branch=master)](http://travis-ci.org/hybridgroup/taskmapper)
+
 PivoFlow let's you choose the story from Pivotal Tracker you are currently working on. Intended for all the people, who doesn't like feature-branch approach or are "merdżuj - nie pier*ol"-theory enthusiasts.
 
 ## Installation

@@ -72,6 +72,7 @@ module PivoFlow
         exit(1)
       end
       send(command, *args)
+      exit(0)
     end
 
   end

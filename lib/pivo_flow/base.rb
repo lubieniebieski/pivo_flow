@@ -82,10 +82,14 @@ module PivoFlow
       KEYS_AND_QUESTIONS.each do |key, question|
         ask_question_and_force_update_config(question, key)
       end
-      puts "[SUCCESS] Pivotal Tracker configuration has been updated."
+      config_update_success
     end
 
     private
+
+    def config_update_success
+      puts "[SUCCESS] Pivotal Tracker configuration has been updated."
+    end
 
     def git_config_ok?
       !KEYS_AND_QUESTIONS.keys.any? { |key| @options[:repository].config[key].nil? }
@@ -111,6 +115,13 @@ module PivoFlow
 
     def ask_question_and_force_update_config question, variable
       @options[:repository].config[variable] = ask_question(question)
+    end
+
+    def update_config_from_options
+      KEYS_AND_QUESTIONS.keys.each do |key|
+        @options[:repository].config[key] = @options[key.gsub(/-/, "_")]
+      end
+      config_update_success
     end
 
     def ask_question question, first_answer = nil

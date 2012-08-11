@@ -2,6 +2,11 @@ require_relative './../../lib/pivo_flow/cli'
 
 describe PivoFlow::Cli do
 
+  before(:each) do
+    # we don't need cli output all over the specs
+    PivoFlow::Cli.any_instance.stub(:puts)
+  end
+
   describe "with no args provided" do
 
     let(:command) { PivoFlow::Cli.new.go! }
@@ -39,19 +44,11 @@ describe PivoFlow::Cli do
   end
 
   describe "with valid command" do
-
-    let(:command) { PivoFlow::Cli.new("new_method_name").go! }
-
-    module PivoFlow
-      class Cli
-        def self.new_method_name
-          puts "hi!"
-        end
-      end
-    end
+    cmd = "stories"
+    let(:command) { PivoFlow::Cli.new(cmd).go! }
 
     before do
-      PivoFlow::Cli.any_instance.should_receive(:new_method_name)
+      PivoFlow::Cli.any_instance.should_receive(cmd.to_sym)
     end
 
     it "runs this command if it is public" do
@@ -64,9 +61,13 @@ describe PivoFlow::Cli do
 
   end
 
-  it "should define given methods" do
-    methods = [:stories, :start, :finish, :clear, :reconfig, :version]
-    (PivoFlow::Cli.methods(false) && methods).should eq methods
+  it "should allow to execute given commands" do
+    methods = [:stories, :start, :finish, :clear, :reconfig]
+
+    methods.each do |method|
+      PivoFlow::Cli.any_instance.stub(method)
+      PivoFlow::Cli.new(method.to_s).go!.should eq 0
+    end
   end
 
 end

@@ -17,8 +17,8 @@ module PivoFlow
     }
 
     # Basic initialize method
-    def initialize(*args)
-      @options = {}
+    def initialize(options={})
+      @options = options
       @current_dir = Dir.pwd
 
       # exit if no git repo found

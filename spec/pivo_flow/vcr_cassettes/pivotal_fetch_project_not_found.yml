@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.pivotaltracker.com/services/v3/projects/123456
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      accept:
+      - ! '*/*; q=0.5, application/xml'
+      accept-encoding:
+      - gzip, deflate
+      x-trackertoken:
+      - !binary |-
+        dGVzdHRlc3R0ZXN0dGVzdHRlc3R0ZXN0dGVzdHRlc3Q=
+      content-type:
+      - application/xml
+      user-agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: !binary |-
+        Tm90IEZvdW5k
+    headers:
+      !binary "Y29udGVudC10eXBl":
+      - !binary |-
+        YXBwbGljYXRpb24veG1sOyBjaGFyc2V0PXV0Zi04
+      !binary "dHJhbnNmZXItZW5jb2Rpbmc=":
+      - !binary |-
+        Y2h1bmtlZA==
+      !binary "Y29ubmVjdGlvbg==":
+      - !binary |-
+        Y2xvc2U=
+      !binary "c3RhdHVz":
+      - !binary |-
+        NDA0
+      !binary "eC1wb3dlcmVkLWJ5":
+      - !binary |-
+        UGh1c2lvbiBQYXNzZW5nZXIgKG1vZF9yYWlscy9tb2RfcmFjaykgMy4wLjE0
+      !binary "Y2FjaGUtY29udHJvbA==":
+      - !binary |-
+        bm8tY2FjaGU=
+      !binary "c2V0LWNvb2tpZQ==":
+      - !binary |-
+        dF9zZXNzaW9uPUJBaDdCem9QWlhod2FYSmxjMTloZEVsMU9nbFVhVzFsRFhN
+        ZUhJQ1dwbTdzQmpvZlFHMWhjbk5vWVd4ZmQybDBhRjkxZEdOZlkyOWxjbU5w
+        YjI1R09nOXpaWE56YVc5dVgybGtJaVUzWVRRNE9EYzRZV1JoTXpCbE4yWTBO
+        bVl6TkdSa1lqTmlNRFkyWTJJNU5nJTNEJTNELS1jYzA0MTQ4OTQ4ZDRmNGE2
+        ODBhOTcxNjdlMWFjZDEyNjliMzUyMDg3OyBwYXRoPS87IHNlY3VyZTsgSHR0
+        cE9ubHk=
+      !binary "c2VydmVy":
+      - !binary |-
+        bmdpbngvMS4yLjIgKyBQaHVzaW9uIFBhc3NlbmdlciAzLjAuMTQgKG1vZF9y
+        YWlscy9tb2RfcmFjayk=
+      !binary "Y29udGVudC1lbmNvZGluZw==":
+      - !binary |-
+        Z3ppcA==
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAA7Oxr8jNUShLLSrOzM+zVTLUM1BSSM1Lzk/JzEu3VQoNcdO1
+        ULK347LJTS0uTkxPtQtKLc4vLUpOVcjLL1FIyy/NS7HRh8lxAQD8+cQBTQAA
+        AA==
+    http_version: !binary |-
+      MS4x
+  recorded_at: Sun, 12 Aug 2012 19:59:06 GMT
+recorded_with: VCR 2.2.4

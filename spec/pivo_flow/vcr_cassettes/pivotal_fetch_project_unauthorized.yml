@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://www.pivotaltracker.com/services/v3/projects/123456
+    uri: https://www.pivotaltracker.com/services/v3/projects/123456
     body:
       encoding: US-ASCII
       string: ''
@@ -12,7 +12,8 @@ http_interactions:
       accept-encoding:
       - gzip, deflate
       x-trackertoken:
-      - '123'
+      - !binary |-
+        dGVzdHRlc3R0ZXN0dGVzdHRlc3R0ZXN0dGVzdHRlc3Q=
       content-type:
       - application/xml
       user-agent:
@@ -34,6 +35,9 @@ http_interactions:
       - Phusion Passenger (mod_rails/mod_rack) 3.0.14
       cache-control:
       - no-cache
+      set-cookie:
+      - t_session=BAh7BzoPZXhwaXJlc19hdEl1OglUaW1lDXQeHIBq12cCBjofQG1hcnNoYWxfd2l0aF91dGNfY29lcmNpb25GOg9zZXNzaW9uX2lkIiU3MmQyNTA4MGE1OGE2M2JlNmFkMWZlMTY1ZTgzNjdkMg%3D%3D--ed2d695aaf7f6de6f4fdb6f7ce12548268b4a5c6;
+        path=/; secure; HttpOnly
       server:
       - nginx/1.2.2 + Phusion Passenger 3.0.14 (mod_rails/mod_rack)
     body:
@@ -42,5 +46,5 @@ http_interactions:
 
 '
     http_version: '1.1'
-  recorded_at: Sat, 11 Aug 2012 14:12:07 GMT
+  recorded_at: Sun, 12 Aug 2012 20:00:38 GMT
 recorded_with: VCR 2.2.4

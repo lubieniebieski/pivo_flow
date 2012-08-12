@@ -16,6 +16,8 @@ module PivoFlow
 
     private
 
+    # available commands
+
     def stories
       pivotal_object.show_stories
     end
@@ -46,9 +48,15 @@ module PivoFlow
       PivoFlow::Base.new.reconfig
     end
 
+    def info
+      pivotal_object.show_info
+    end
+
     def version
       puts PivoFlow::VERSION
     end
+
+    # additional methods
 
     def pivotal_object
       @pivotal_object ||= PivoFlow::Pivotal.new(@options)
@@ -69,6 +77,7 @@ module PivoFlow
         opts.banner =   "Usage: pf <COMMAND> [OPTIONS]\n"
         opts.separator  "Commands"
         opts.separator  "     clear:             clears STORY_ID from temp file"
+        opts.separator  "     info:              shows info about current story"
         opts.separator  "     finish [STORY_ID]: finish story on Pivotal"
         opts.separator  "     reconfig:          clears API_TOKEN and PROJECT_ID from git config"
         opts.separator  "     start <STORY_ID>:  start a story of given ID"
@@ -87,11 +96,11 @@ module PivoFlow
         end
 
         opts.on("-t <API_TOKEN>", "--token <API_TOKEN>", "Sets Pivotal Tracker API TOKEN") do |api_token|
-          @options[:api_token] = api_token
+          @options["api-token"] = api_token
         end
 
         opts.on("-p <PROJECT_ID>", "--project <PROJECT_ID>", Numeric, "Sets Pivotal Tracker PROJECT_ID") do |project_id|
-          @options[:project_id] = project_id
+          @options["project-id"] = project_id
         end
 
       end
@@ -109,9 +118,11 @@ module PivoFlow
         stories
       when "finish"
         finish args[1]
+      when "info"
+        info
       when nil
         no_method_error
-        puts opt_parser.summarize
+        puts opt_parser.to_s
         return 1
       else
         invalid_method_error

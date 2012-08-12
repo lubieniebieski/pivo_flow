@@ -7,6 +7,7 @@ describe PivoFlow::Base do
   before do
     PivoFlow::Base.any_instance.stub(:puts)
     stub_git_config
+    stub_base_methods(PivoFlow::Base)
   end
 
   it "raises exception if it's outside of git repo" do

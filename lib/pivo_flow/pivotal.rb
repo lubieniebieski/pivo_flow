@@ -71,6 +71,10 @@ module PivoFlow
     def show_info story=nil
       story = current_story if story.nil?
       puts story_string(story, true)
+      puts "\n[TASKS]"
+      story.tasks.all.count.zero? ? puts("        no tasks") : print_tasks(story.tasks.all)
+      puts "\n[NOTES]"
+      story.notes.all.count.zero? ? puts("        no notes") : print_notes(story.notes.all)
     end
 
     def find_story story_id
@@ -101,6 +105,24 @@ module PivoFlow
       else
         "[#%{story_id}] (%{started}) %{story_type} [%{estimate} pts.] %{owner} %{name}" % vars
       end
+    end
+
+
+    def print_tasks tasks
+      tasks.each { |task| puts task_string(task) }
+    end
+
+    def print_notes notes
+      notes.each { |note| puts note_string(note) }
+    end
+
+    def note_string note
+      "\t[#{note.noted_at.to_time}] (#{note.author}) #{note.text}"
+    end
+
+    def task_string task
+      complete = task.complete ? "x" : " "
+      "\t[#{complete}] #{task.description}"
     end
 
     def story_type_icon story

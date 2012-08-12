@@ -74,7 +74,7 @@ module PivoFlow
     end
 
     def find_story story_id
-      story = project_stories.find { |p| p.id == story_id }
+      story = project_stories.find { |p| p.id == story_id.to_i }
       story.nil? ? @options[:project].stories.find(story_id) : story
     end
 

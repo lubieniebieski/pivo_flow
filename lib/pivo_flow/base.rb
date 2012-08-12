@@ -6,7 +6,7 @@ module PivoFlow
   # * installing git hook
 
   class Base
-
+    attr_reader :options
     # Git repository directory
     GIT_DIR = '.git'
     # Keys used by gem in git config, with corresponding questions which are

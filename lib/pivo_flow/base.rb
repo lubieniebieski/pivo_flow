@@ -21,11 +21,7 @@ module PivoFlow
       @options = options
       @current_dir = Dir.pwd
 
-      # exit if no git repo found
-      unless File.directory?(File.join(@current_dir, GIT_DIR))
-        puts("no GIT (#{GIT_DIR}) directory found")
-        exit(1)
-      end
+      raise PivoFlow::Errors::NoGitRepoFound, "No git repository found" unless git_directory_present?
 
       # paths
       @git_dir = File.join(@current_dir, GIT_DIR)
@@ -45,11 +41,14 @@ module PivoFlow
       !File.executable?(@git_hook_path) || !File.read(@git_hook_path).match(/#{@pf_git_hook_name} \$1/)
     end
 
+    def git_directory_present?
+      File.directory?(File.join(@current_dir, GIT_DIR))
+    end
+
     # Install git hook
     # Copy hook to <tt>.git/hooks</tt> directory and add a reference to this
     # executable file within <tt>prepare-commit-msg</tt> hook (it may be
     # helpful if user has his custom hooks)
-
     def install_git_hook
       puts "Installing prepare-commit-msg hook..."
       hook_path = File.join(File.dirname(__FILE__), '..', '..', 'bin', @pf_git_hook_name)

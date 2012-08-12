@@ -11,7 +11,12 @@ module PivoFlow
         puts "\nkkthxbye!"
         return 0
       }
-      return parse_argv(@args)
+      begin
+        return parse_argv(@args)
+      rescue *PivoFlow::Errors.exceptions => e
+        puts "[ERROR] #{e}"
+        return 1
+      end
     end
 
     private

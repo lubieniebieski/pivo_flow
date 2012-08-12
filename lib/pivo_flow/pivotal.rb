@@ -1,22 +1,20 @@
 # -*- encoding : utf-8 -*-
 module PivoFlow
   class Pivotal < Base
-
     def run
       @story_id_file_name = ".pivotal_story_id"
       @story_id_tmp_path = File.join(@current_dir, "/tmp")
       @story_id_file_path = File.join(@story_id_tmp_path, @story_id_file_name)
 
-      return 1 unless @options["api-token"] && @options["project-id"]
       PivotalTracker::Client.token = @options["api-token"]
       PivotalTracker::Client.use_ssl = true
 
       begin
         @options[:project] ||= PivotalTracker::Project.find(@options["project-id"])
-      rescue RestClient::Unauthorized => e
-        puts "[ERROR] Pivotal Tracker: #{e}\n"
-        puts "[TIPS] It means that your configuration is wrong. You can reset your settings by running:\npf reconfig"
-        exit(1)
+      rescue Exception => e
+        message = "Pivotal Tracker: #{e.message}\n" +
+        "[TIPS] It means that your configuration is wrong. You can reset your settings by running:\n\tpf reconfig"
+        raise PivoFlow::Errors::UnsuccessfulPivotalConnection, message
       end
 
     end
@@ -147,7 +145,7 @@ module PivoFlow
     end
 
     def initials name
-      name.split.map{ |n| n[0]}.join
+      name.split.map{ |n| n[0] }.join
     end
 
     def estimate_points story

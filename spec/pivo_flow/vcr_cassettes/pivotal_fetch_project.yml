@@ -1,0 +1,46 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://www.pivotaltracker.com/services/v3/projects/123456
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      accept:
+      - ! '*/*; q=0.5, application/xml'
+      accept-encoding:
+      - gzip, deflate
+      x-trackertoken:
+      - '123'
+      content-type:
+      - application/xml
+      user-agent:
+      - Ruby
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      content-type:
+      - text/html; charset=utf-8
+      content-length:
+      - '15'
+      connection:
+      - close
+      status:
+      - '401'
+      x-powered-by:
+      - Phusion Passenger (mod_rails/mod_rack) 3.0.14
+      cache-control:
+      - no-cache
+      server:
+      - nginx/1.2.2 + Phusion Passenger 3.0.14 (mod_rails/mod_rack)
+    body:
+      encoding: US-ASCII
+      string: ! 'Access denied.
+
+'
+    http_version: '1.1'
+  recorded_at: Sat, 11 Aug 2012 14:12:07 GMT
+recorded_with: VCR 2.2.4

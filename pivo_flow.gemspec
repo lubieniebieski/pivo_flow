@@ -18,8 +18,11 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "pivotal-tracker"
   gem.add_runtime_dependency "grit"
   gem.add_runtime_dependency "highline"
+
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "simplecov"
   gem.add_development_dependency "rake"
+  gem.add_development_dependency "vcr"
+  gem.add_development_dependency "fakeweb"
 
 end

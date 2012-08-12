@@ -55,8 +55,9 @@ This gem installs a `pepare-commit-msg` hook by adding a reference to `pf-prepar
   * select story
   * read the story description
   * accept or back to story selection
-* `pf info` displaying info about current task, it's comments and all the available data
-*  `pf --help` and other options via OptionParser
+* `pf info` displaying info about current task
+* `pf --help` and other options via OptionParser
+* comments and tasks in a single-story view
 
 ### 0.2
 

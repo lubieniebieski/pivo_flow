@@ -91,17 +91,17 @@ module PivoFlow
         estimate: estimate_points(story),
         owner: story_owner(story),
         description: story.description,
-        labels: story.labels,
+        labels: story_labels(story),
         started: story.current_state == "started" ? "S" : "N"
       }
       if long
         "STORY %{started} %{story_type} [#%{story_id}]
-        Name: %{name}
-        Labels: %{labels}
-        Owned by: %{owner}
+        Name:         %{name}
+        Labels:       %{labels}
+        Owned by:     %{owner}
         Requested by: %{requested_by}
-        Description: %{description}
-        Estimate: %{estimate}" % vars
+        Description:  %{description}
+        Estimate:     %{estimate}" % vars
       else
         "[#%{story_id}] (%{started}) %{story_type} [%{estimate} pts.] %{owner} %{name}" % vars
       end
@@ -140,6 +140,10 @@ module PivoFlow
 
     def story_owner story
       story.owned_by.nil? ? "(--)" : "(#{initials(story.owned_by)})"
+    end
+
+    def story_labels story
+      story.labels.nil? ? "" : story.labels.split(",").map{ |l| "##{l}" }.join(", ")
     end
 
     def initials name

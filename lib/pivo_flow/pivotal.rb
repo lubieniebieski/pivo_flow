@@ -58,7 +58,7 @@ module PivoFlow
 
     def show_story story_id
       story = find_story(story_id)
-      puts story_string(story, true)
+      show_info story
       proceed = ask_question "Do you want to start this story?"
       accepted_answers = %w[yes y sure ofc jup yep yup ja tak]
       if accepted_answers.include?(proceed.downcase)
@@ -66,6 +66,11 @@ module PivoFlow
       else
         show_stories
       end
+    end
+
+    def show_info story=nil
+      story = current_story if story.nil?
+      puts story_string(story, true)
     end
 
     def find_story story_id

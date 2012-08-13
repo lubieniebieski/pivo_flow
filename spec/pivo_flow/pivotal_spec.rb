@@ -6,7 +6,7 @@ describe PivoFlow::Pivotal do
 
   before do
     stub_git_config
-
+    PivoFlow::Pivotal.any_instance.stub(:puts)
     stub_base_methods(PivoFlow::Pivotal)
   end
 
@@ -58,6 +58,11 @@ describe PivoFlow::Pivotal do
         pivotal.start_story(@story_feature.id).should be_true
       end
 
+    end
+
+    it "show_info returns 1 if there is no story" do
+      @project.stub_chain(:stories, :all).and_return([])
+      expect(pivotal.show_info).to eq 1
     end
 
     describe "current_story" do

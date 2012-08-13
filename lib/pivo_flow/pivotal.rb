@@ -67,7 +67,11 @@ module PivoFlow
     end
 
     def show_info story=nil
-      story = current_story if story.nil?
+      story = story || current_story
+      if story.nil?
+        puts "No story, no worry..."
+        return 1
+      end
       puts story_string(story, true)
       puts "\n[TASKS]"
       story.tasks.all.count.zero? ? puts("        no tasks") : print_tasks(story.tasks.all)

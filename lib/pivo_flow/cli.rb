@@ -36,17 +36,25 @@ module PivoFlow
     end
 
     def finish story_id=nil
-      if File.exists? @file_story_path
-        story_id = File.open(@file_story_path).read.strip
+      unless current_story_id
+        puts no_story_found_message
+        return 1
       end
-      pivotal_object.finish_story(story_id)
+      pivotal_object.finish_story(current_story_id)
     end
 
     def clear
-      if File.exists? @file_story_path
+      unless current_story_id.nil?
         FileUtils.remove_file(@file_story_path)
+        puts "Current pivotal story id cleared."
+      else
+        puts no_story_found_message
+        return 1
       end
-      puts "Current pivotal story id cleared."
+    end
+
+    def current
+      puts current_story_id || no_story_found_message
     end
 
     def reconfig
@@ -67,12 +75,21 @@ module PivoFlow
       @pivotal_object ||= PivoFlow::Pivotal.new(@options)
     end
 
+    def no_story_found_message
+      "No story found in #{@file_story_path}"
+    end
+
     def no_method_error
       puts "You forgot a method name"
     end
 
     def invalid_method_error
       puts "Ups, no such method..."
+    end
+
+    def current_story_id
+      return nil unless File.exists?(@file_story_path)
+      File.open(@file_story_path).read.strip
     end
 
     def parse_argv(args)
@@ -113,18 +130,10 @@ module PivoFlow
       opt_parser.parse!(args)
 
       case args[0]
-      when "clear"
-        clear
-      when "reconfig"
-        reconfig
-      when "start"
-        start args[1]
-      when "stories"
-        stories
-      when "finish"
-        finish args[1]
-      when "info"
-        info
+      when "start", "finish"
+        self.send(args[0].to_sym, args[1])
+      when "clear", "current", "reconfig", "stories", "info"
+        self.send(args[0].to_sym)
       when nil
         no_method_error
         puts opt_parser.to_s
@@ -138,4 +147,5 @@ module PivoFlow
     end
 
   end
+
 end

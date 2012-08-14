@@ -60,8 +60,42 @@ describe PivoFlow::Cli do
     end
 
   end
+
+
+  describe "reads story id from file" do
+
+    it "and returns nil if there is no such file" do
+      File.stub(:exists?).and_return(false)
+      PivoFlow::Cli.new.send(:current_story_id).should be_nil
+    end
+
+    it "and returns story id if file exists" do
+      File.stub(:exists?).and_return(true)
+      f = mock('File', :read => "123")
+      File.stub(:open).and_return(f)
+      PivoFlow::Cli.new.send(:current_story_id).should eq "123"
+    end
+  end
+
+  describe "finish method" do
+
+    it "calls finish_story on pivotal object on finish method" do
+      pivo = mock("PivoFlow::Pivotal")
+      PivoFlow::Cli.any_instance.should_receive(:pivotal_object).and_return(pivo)
+      pivo.should_receive(:finish_story).with("123")
+      PivoFlow::Cli.any_instance.should_receive(:current_story_id).twice.and_return("123")
+      PivoFlow::Cli.new("finish").go!
+    end
+
+    it "returns 1 if there is no current_story_id" do
+      PivoFlow::Cli.any_instance.should_receive(:current_story_id).and_return(nil)
+      PivoFlow::Cli.new.send(:finish).should eq 1
+    end
+  end
+
+
   describe "should allow to run command named" do
-    methods = [:stories, :start, :info, :finish, :clear, :reconfig]
+    methods = [:stories, :start, :info, :finish, :clear, :reconfig, :current]
     methods.each do |method|
       it "#{method.to_s}" do
         PivoFlow::Cli.any_instance.stub(method)

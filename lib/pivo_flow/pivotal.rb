@@ -94,7 +94,7 @@ module PivoFlow
         owner: story_owner(story),
         description: story.description,
         labels: story_labels(story),
-        started: story.current_state == "started" ? "S" : "N"
+        started: story_state_sign(story)
       }
       if long
         "STORY %{started} %{story_type} [#%{story_id}]
@@ -146,6 +146,11 @@ module PivoFlow
 
     def story_labels story
       story.labels.nil? ? "" : story.labels.split(",").map{ |l| "##{l}" }.join(", ")
+    end
+
+    def story_state_sign story
+      return "*" if story.current_state == "unstarted"
+      story.current_state[0].capitalize
     end
 
     def initials name
@@ -203,7 +208,7 @@ module PivoFlow
       list_stories_to_output stories.first(9)
     end
 
-    def fetch_stories(count = 100, state = "unstarted,started,unscheduled")
+    def fetch_stories(count = 100, state = "unstarted,started,unscheduled,rejected")
       conditions = { current_state: state, limit: count }
       @options[:stories] = @options[:project].stories.all(conditions)
     end

@@ -136,13 +136,13 @@ module PivoFlow
       case args[0]
       when "start", "finish"
         self.send(args[0].to_sym, args[1])
-      when "clear", "current", "reconfig", "stories", "info"
       when "help"
         puts opt_parser
+      when "clear", "current", "deliver", "info", "reconfig", "stories"
         self.send(args[0].to_sym)
       when nil
         no_method_error
-        puts opt_parser.to_s
+        puts opt_parser
         return 1
       else
         invalid_method_error

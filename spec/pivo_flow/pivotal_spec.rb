@@ -92,6 +92,22 @@ describe PivoFlow::Pivotal do
         pivotal.show_story 1
       end
 
+      describe "if story's state is 'finished'" do
+
+        before(:each) do
+          @story_feature.stub(:current_state).and_return("finished")
+          pivotal.stub(:ask_question).and_return("y")
+        end
+
+        it "ask for deliver the story" do
+          pivotal.should_receive(:ask_question).with(/deliver/)
+        end
+
+        it "updates story on pivotal with 'delivered' status" do
+          @story_feature.should_receive(:update).with({ owned_by: @story_feature.owned_by, current_state: :delivered })
+        end
+
+      end
 
 
       it "shows info about the story" do

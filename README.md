@@ -17,7 +17,15 @@ All the required information is gathered on demand, but it's a good idea to prep
 * project's Pivotal Tracker ID
 * your Pivotal Tracker API token
 
-Get list of current stories
+Show help
+
+    pf help
+
+or
+
+    pf --help
+
+Get list of current stories with an interactive choice menu
 
     pf stories
 
@@ -32,6 +40,10 @@ Finish current story [or given story ID]
 Clear current story without notifying Pivotal
 
     pf clear
+
+Show finished stories and select the one you would like to deliver
+
+    pf deliver
 
 Display current gem version
 
@@ -50,18 +62,18 @@ This gem installs a `pepare-commit-msg` hook by adding a reference to `pf-prepar
 
 ### 0.3 Current release
 
-* single-story view
+* single-story view with comments and tasks
 * flow:
   * select story
   * read the story description
   * accept or back to story selection
 * `pf info` displaying info about current task
-* `pf --help` and other options via OptionParser
-* comments and tasks in a single-story view
+* `pf deliver` ability to deliver finished stories [#6]
+* options via `OptionParser`
 
 ### 0.2
 
-* git hoook
+* git hook
 * formatted output
 * bugfixes
 

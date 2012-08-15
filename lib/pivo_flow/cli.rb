@@ -43,6 +43,10 @@ module PivoFlow
       pivotal_object.finish_story(current_story_id)
     end
 
+    def deliver
+      pivotal_object.deliver
+    end
+
     def clear
       unless current_story_id.nil?
         FileUtils.remove_file(@file_story_path)

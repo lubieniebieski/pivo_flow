@@ -44,6 +44,15 @@ describe PivoFlow::Pivotal do
       pivotal.unasigned_stories.should eq [@story_unassigned]
     end
 
+    describe "deliver" do
+
+      it "list only the stories with 'finished' status" do
+        @project.stub_chain(:stories, :all).and_return([@story_finished])
+        pivotal.should_receive(:list_stories_to_output).with([@story_finished])
+        pivotal.deliver
+      end
+
+    end
     describe "start_story" do
       before(:each) do
         @story_feature.stub_chain(:update, :errors, :count).and_return(0)

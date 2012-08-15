@@ -35,6 +35,10 @@ module PivoFlow
       project_stories.select{ |story| story.owned_by == nil }
     end
 
+    def finished_stories
+      fetch_stories(10, "finished")
+    end
+
     def current_story force = false
       if (@options[:current_story] && !force)
         @options[:current_story]
@@ -44,6 +48,11 @@ module PivoFlow
     end
 
     def list_stories_to_output stories
+      if (stories.nil? || stories.empty?)
+        puts "No stories to show"
+        return 1
+      end
+
       HighLine.new.choose do |menu|
         menu.header = "\n--- STORIES FROM PIVOTAL TRACKER ---\nWhich one would you like to start?   "
         menu.prompt = "story no.? "
@@ -54,13 +63,18 @@ module PivoFlow
       end
     end
 
+    def deliver
+      list_stories_to_output finished_stories
+    end
+
     def show_story story_id
       story = find_story(story_id)
       show_info story
-      proceed = ask_question "Do you want to start this story?"
+      ask_for = story.current_state == "finished" ? "deliver" : "start"
+      proceed = ask_question "Do you want to #{ask_for} this story?"
       accepted_answers = %w[yes y sure ofc jup yep yup ja tak]
       if accepted_answers.include?(proceed.downcase)
-        pick_up_story(story_id)
+        story.current_state == "finished" ? deliver_story(story_id) : pick_up_story(story_id)
       else
         show_stories
       end
@@ -192,6 +206,10 @@ module PivoFlow
 
     def finish_story story_id
       remove_story_id_file if story_id.nil? or update_story(story_id, :finished)
+    end
+
+    def deliver_story story_id
+      update_story(story_id, :delivered)
     end
 
     def remove_story_id_file

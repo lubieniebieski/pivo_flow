@@ -95,7 +95,7 @@ describe PivoFlow::Cli do
 
 
   describe "should allow to run command named" do
-    methods = [:stories, :start, :info, :finish, :clear, :reconfig, :current]
+    methods = [:stories, :start, :info, :finish, :clear, :reconfig, :current, :deliver]
     methods.each do |method|
       it "#{method.to_s}" do
         PivoFlow::Cli.any_instance.stub(method)

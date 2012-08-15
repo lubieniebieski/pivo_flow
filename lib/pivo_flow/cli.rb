@@ -137,6 +137,8 @@ module PivoFlow
       when "start", "finish"
         self.send(args[0].to_sym, args[1])
       when "clear", "current", "reconfig", "stories", "info"
+      when "help"
+        puts opt_parser
         self.send(args[0].to_sym)
       when nil
         no_method_error

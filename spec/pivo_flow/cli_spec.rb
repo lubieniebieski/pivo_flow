@@ -61,7 +61,6 @@ describe PivoFlow::Cli do
 
   end
 
-
   describe "reads story id from file" do
 
     it "and returns nil if there is no such file" do
@@ -91,6 +90,30 @@ describe PivoFlow::Cli do
       PivoFlow::Cli.any_instance.should_receive(:current_story_id).and_return(nil)
       PivoFlow::Cli.new.send(:finish).should eq 1
     end
+  end
+
+  describe "start method" do
+
+    it "returns 1 if no story given" do
+      PivoFlow::Cli.new.send(:start).should eq 1
+    end
+
+  end
+
+  describe "clear method" do
+
+    it "returns 1 if current story is nil" do
+      PivoFlow::Cli.any_instance.should_receive(:current_story_id).and_return(nil)
+      PivoFlow::Cli.new.send(:clear).should eq 1
+    end
+
+
+    it "removes file if current story is present" do
+      PivoFlow::Cli.any_instance.should_receive(:current_story_id).and_return(1)
+      FileUtils.should_receive(:remove_file).and_return(true)
+      PivoFlow::Cli.new.send(:clear)
+    end
+
   end
 
 

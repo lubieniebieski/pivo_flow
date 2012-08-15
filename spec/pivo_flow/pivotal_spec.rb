@@ -44,6 +44,22 @@ describe PivoFlow::Pivotal do
       pivotal.unasigned_stories.should eq [@story_unassigned]
     end
 
+    it "show_stories should display stories on output" do
+      pivotal.should_receive(:list_stories_to_output)
+      pivotal.show_stories
+    end
+
+    describe "story_string" do
+
+      it "includes story id" do
+        pivotal.story_string(@story_feature).should match(/[##{@story_feature.id}]/)      end
+
+      it "includes story name" do
+        pivotal.story_string(@story_feature).should match(/#{@story_feature.name}/)
+      end
+
+    end
+
     describe "deliver" do
 
       it "list only the stories with 'finished' status" do
@@ -53,9 +69,50 @@ describe PivoFlow::Pivotal do
       end
 
     end
+
+    describe "list_stories_to_output" do
+
+      it "returns 1 if stories are nil" do
+        pivotal.list_stories_to_output(nil).should eq 1
+      end
+
+      it "returns 1 if stories are []" do
+        pivotal.list_stories_to_output([]).should eq 1
+      end
+
+    end
+
+    describe "show_story" do
+
+      after(:each) do
+        pivotal.stub(:show_stories)
+        # pivotal.stub(:update_story)
+        pivotal.stub(:show_info)
+
+        pivotal.show_story 1
+      end
+
+
+
+      it "shows info about the story" do
+        pivotal.stub(:ask_question).and_return("no")
+        pivotal.should_receive(:show_info)
+      end
+
+      it "updates the story if user response is 'yes'" do
+        pivotal.stub(:ask_question).and_return("yes")
+        pivotal.should_receive(:update_story)
+      end
+
+      it "show stories if user response is 'no'" do
+        pivotal.stub(:ask_question).and_return("no")
+        pivotal.should_receive(:show_stories)
+      end
+    end
+
     describe "start_story" do
+
       before(:each) do
-        @story_feature.stub_chain(:update, :errors, :count).and_return(0)
         @story_feature.should_receive(:update).with({ current_state: :started, owned_by: pivotal.user_name })
       end
 
@@ -121,7 +178,10 @@ def stub_pivotal_project
     requested_by: "Paul Newman",
     owned_by: "Adam Newman",
     labels: "first,second")
-  @story_unassigned = PivotalTracker::Story.new(owned_by: nil)
-  @project.stub_chain(:stories, :all).and_return([@story_feature, @story_unassigned])
+  @story_feature.stub_chain(:update).and_return(mock(errors: []))
+  @story_unassigned = PivotalTracker::Story.new(owned_by: nil, name: "test", current_state: "started")
+  @story_rejected = PivotalTracker::Story.new(current_state: "rejected", owned_by: "Mark Marco", name: "test_rejected")
+  @story_finished = PivotalTracker::Story.new(current_state: "finished", owned_by: "Mark Marco", name: "finished")
+  @project.stub_chain(:stories, :all).and_return([@story_feature, @story_unassigned, @story_rejected, @story_finished])
   PivotalTracker::Project.stub(:find).and_return(@project)
 end

@@ -124,7 +124,29 @@ module PivoFlow
         Description:  %{description}
         Estimate:     %{estimate}" % vars
       else
-        "[#%{story_id}] (%{started}) %{story_type} [%{estimate} pts.] %{owner} %{name}" % vars
+        "[#%{story_id}] (%{started}) %{story_type} [%{estimate} pts.] %{owner} %{name}".colorize(story_color(story)) % vars
+      end
+    end
+
+    def users_story?(story)
+      story.owned_by == user_name
+    end
+
+    def story_color story
+      if users_story?(story)
+        case story.story_type
+          when "feature" then :green
+          when "bug" then :red
+          when "chore" then :yellow
+          else :white
+        end
+      else
+        case story.story_type
+          when "feature" then :light_green
+          when "bug" then :light_red
+          when "chore" then :ligh_yellow
+          else :light_white
+        end
       end
     end
 

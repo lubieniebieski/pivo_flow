@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "pivotal-tracker"
   gem.add_runtime_dependency "grit"
   gem.add_runtime_dependency "highline"
+  gem.add_runtime_dependency "colorize"
 
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "simplecov"

@@ -1,3 +1,4 @@
+require 'colorize'
 require 'grit'
 require 'optparse'
 require 'highline'

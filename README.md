@@ -59,12 +59,13 @@ This gem installs a `pepare-commit-msg` hook by adding a reference to `pf-prepar
 
 ## Roadmap
 
-### Incoming releases
+### 0.4 Current release
 
-* story statistics
 * colorized output
+* **TODO** story statistics
+* **TODO** git statistics (number of commits in some peroid, average, etc.)
 
-### 0.3 Current release
+### 0.3
 
 * single-story view with comments and tasks
 * flow:

@@ -100,17 +100,18 @@ module PivoFlow
       @options = {}
 
       opt_parser = OptionParser.new do |opts|
-        opts.banner =   "Usage: pf <COMMAND> [OPTIONS]\n"
+        opts.banner =   "\nPivoFlow ver. #{PivoFlow::VERSION}\nUsage: pf <COMMAND> [OPTIONS]\n"
         opts.separator  "Commands"
-        opts.separator  "     clear:             clears STORY_ID from temp file"
-        opts.separator  "     deliver:           shows finished stories and mark selected as delivered in Pivotal Tracker"
-        opts.separator  "     help               shows this message"
-        opts.separator  "     finish [STORY_ID]: finish story on Pivotal"
-        opts.separator  "     info:              shows info about current story"
-        opts.separator  "     reconfig:          clears API_TOKEN and PROJECT_ID from git config"
-        opts.separator  "     start <STORY_ID>:  start a story of given ID"
-        opts.separator  "     stories:           list stories for current project"
-        opts.separator  "     version:           show gem version"
+        opts.separator  "     clear             clear STORY_ID from temp file"
+        opts.separator  "     current           show STORY_ID from temp file"
+        opts.separator  "     deliver           show finished stories and mark selected as delivered in Pivotal Tracker"
+        opts.separator  "     help              show this message"
+        opts.separator  "     finish [STORY_ID] finish story on Pivotal"
+        opts.separator  "     info              show info about current story"
+        opts.separator  "     reconfig          clear API_TOKEN and PROJECT_ID from git config and setup new values"
+        opts.separator  "     start <STORY_ID>  start a story of given ID"
+        opts.separator  "     stories           list stories for current project"
+        opts.separator  "     version           show gem version"
         opts.separator  ""
         opts.separator  "Options"
 
@@ -124,11 +125,11 @@ module PivoFlow
           return 1
         end
 
-        opts.on("-t <API_TOKEN>", "--token <API_TOKEN>", "Sets Pivotal Tracker API TOKEN") do |api_token|
+        opts.on("-t <API_TOKEN>", "--token <API_TOKEN>", "Set Pivotal Tracker API TOKEN") do |api_token|
           @options["api-token"] = api_token
         end
 
-        opts.on("-p <PROJECT_ID>", "--project <PROJECT_ID>", Numeric, "Sets Pivotal Tracker PROJECT_ID") do |project_id|
+        opts.on("-p <PROJECT_ID>", "--project <PROJECT_ID>", Numeric, "Set Pivotal Tracker PROJECT_ID") do |project_id|
           @options["project-id"] = project_id
         end
 

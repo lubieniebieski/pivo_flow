@@ -90,12 +90,17 @@ module PivoFlow
       puts "\n[TASKS]"
       story.tasks.all.count.zero? ? puts("        no tasks") : print_tasks(story.tasks.all)
       puts "\n[NOTES]"
-      story.notes.all.count.zero? ? puts("        no notes") : print_notes(story.notes.all)
+      story_notes(story).count.zero? ? puts("        no notes") : print_notes(story_notes(story))
     end
 
     def find_story story_id
       story = project_stories.find { |p| p.id == story_id.to_i }
       story.nil? ? @options[:project].stories.find(story_id) : story
+    end
+
+    def story_notes story, exclude_commits=true
+      return story.notes.all unless exclude_commits
+      story.notes.all.select { |n| n.text !~ /Commit by/ }
     end
 
     def story_string story, long=false
@@ -122,7 +127,6 @@ module PivoFlow
         "[#%{story_id}] (%{started}) %{story_type} [%{estimate} pts.] %{owner} %{name}" % vars
       end
     end
-
 
     def print_tasks tasks
       tasks.each { |task| puts task_string(task) }

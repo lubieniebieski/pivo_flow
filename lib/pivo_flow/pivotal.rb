@@ -226,8 +226,8 @@ module PivoFlow
       list_stories_to_output stories.first(9)
     end
 
-    def fetch_stories(count = 100, state = "unstarted,started,unscheduled,rejected")
-      conditions = { current_state: state, limit: count }
+    def fetch_stories(count = 100, state = "unstarted,started,unscheduled,rejected", story_type = "feature,chore,bug")
+      conditions = { current_state: state, limit: count, story_type: story_type }
       @options[:stories] = @options[:project].stories.all(conditions)
     end
 

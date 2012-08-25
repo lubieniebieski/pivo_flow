@@ -63,8 +63,9 @@ describe PivoFlow::Pivotal do
     describe "deliver" do
 
       it "list only the stories with 'finished' status" do
+        pivotal.should_receive(:user_name).and_return(@story_finished.owned_by)
         @project.stub_chain(:stories, :all).and_return([@story_finished])
-        pivotal.should_receive(:list_stories_to_output).with([@story_finished])
+        pivotal.should_receive(:list_stories_to_output).with([@story_finished], "deliver")
         pivotal.deliver
       end
 

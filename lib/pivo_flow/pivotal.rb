@@ -36,7 +36,7 @@ module PivoFlow
     end
 
     def finished_stories
-      fetch_stories(10, "finished")
+      fetch_stories(10, "finished").select{ |story| story.owned_by == user_name }
     end
 
     def current_story force = false
@@ -47,14 +47,14 @@ module PivoFlow
       end
     end
 
-    def list_stories_to_output stories
+    def list_stories_to_output stories, activity="start"
       if (stories.nil? || stories.empty?)
         puts "No stories to show"
         return 1
       end
 
       HighLine.new.choose do |menu|
-        menu.header = "\n--- STORIES FROM PIVOTAL TRACKER ---\nWhich one would you like to start?   "
+        menu.header = "\n--- STORIES FROM PIVOTAL TRACKER ---\nWhich one would you like to #{activity}?   "
         menu.prompt = "story no.? "
         menu.select_by = :index
         stories.each do |story|
@@ -64,7 +64,7 @@ module PivoFlow
     end
 
     def deliver
-      list_stories_to_output finished_stories
+      list_stories_to_output finished_stories, "deliver"
     end
 
     def show_story story_id

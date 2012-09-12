@@ -52,6 +52,7 @@ module PivoFlow
     def install_git_hook
       puts "Installing prepare-commit-msg hook..."
       hook_path = File.join(File.dirname(__FILE__), '..', '..', 'bin', @pf_git_hook_name)
+      FileUtils.mkdir_p(File.dirname(@pf_git_hook_path))
       FileUtils.cp(hook_path, @pf_git_hook_path, preserve: true)
       puts "File copied..."
       unless File.exists?(@git_hook_path) && File.read(@git_hook_path).match(@pf_git_hook_cmd)

@@ -60,6 +60,7 @@ module PivoFlow
         stories.each do |story|
           menu.choice(story_string(story)) { |answer| show_story(answer.match(/\[#(?<id>\d+)\]/)[:id])}
         end
+        menu.choice("Show all") { show_stories(100) }
       end
     end
 
@@ -247,9 +248,9 @@ module PivoFlow
       File.open(@story_id_file_path, 'w') { |f| f.write(story_id) }
     end
 
-    def show_stories
+    def show_stories count=9
       stories = user_stories + other_users_stories
-      list_stories_to_output stories.first(9)
+      list_stories_to_output stories.first(count)
     end
 
     def fetch_stories(count = 100, state = "unstarted,started,unscheduled,rejected", story_type = "feature,chore,bug")

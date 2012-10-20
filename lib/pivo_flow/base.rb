@@ -28,6 +28,7 @@ module PivoFlow
       @git_hook_path = File.join(@git_dir, 'hooks', 'prepare-commit-msg')
       @pf_git_hook_name = 'pf-prepare-commit-msg'
       @pf_git_hook_path = File.join(@git_dir, 'hooks', @pf_git_hook_name)
+      @pf_git_hook_local_path = File.join(File.dirname(__FILE__), '..', '..', 'bin', @pf_git_hook_name)
       @pf_git_hook_cmd = "#{@pf_git_hook_path} $1"
       @options[:repository] = Grit::Repo.new(@git_dir)
 
@@ -38,7 +39,11 @@ module PivoFlow
 
     # Check if git hook is already installed
     def git_hook_needed?
-      !File.executable?(@git_hook_path) || !File.read(@git_hook_path).match(/#{@pf_git_hook_name} \$1/)
+      !File.executable?(@git_hook_path) || !File.read(@git_hook_path).match(/#{@pf_git_hook_name} \$1/) || !pf_git_hook_valid?
+    end
+
+    def pf_git_hook_valid?
+      File.executable?(@pf_git_hook_path) && File.read(@pf_git_hook_path).match(File.read(@pf_git_hook_local_path))
     end
 
     def git_directory_present?
@@ -51,11 +56,10 @@ module PivoFlow
     # helpful if user has his custom hooks)
     def install_git_hook
       puts "Installing prepare-commit-msg hook..."
-      hook_path = File.join(File.dirname(__FILE__), '..', '..', 'bin', @pf_git_hook_name)
       FileUtils.mkdir_p(File.dirname(@pf_git_hook_path))
-      FileUtils.cp(hook_path, @pf_git_hook_path, preserve: true)
+      FileUtils.cp(@pf_git_hook_local_path, @pf_git_hook_path, preserve: true)
       puts "File copied..."
-      unless File.exists?(@git_hook_path) && File.read(@git_hook_path).match(@pf_git_hook_cmd)
+      unless File.exists?(@git_hook_path) && File.read(@git_hook_path).match(@pf_git_hook_name)
         File.open(@git_hook_path, "a") { |f| f.puts(@pf_git_hook_cmd) }
         puts "Reference to pf-prepare-commit-msg added to prepare-commit-msg..."
       end

@@ -5,7 +5,7 @@ if File.exists?(story_path)
   if story_id =~ /(\d{7,})/
     puts IO.read(ARGV[0])
     commit_msg = IO.read(ARGV[0])
-    unless commit_msg.include?($1)
+    unless commit_msg.include?($1) or commit_msg =~ /Merge branch/
       File.open(ARGV[0], 'w') do |file|
         file.print commit_msg
         file.print "[##{$1}]"

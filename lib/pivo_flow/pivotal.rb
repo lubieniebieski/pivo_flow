@@ -113,7 +113,7 @@ module PivoFlow
         estimate: estimate_points(story),
         owner: story_owner(story),
         description: story.description,
-        labels: story_labels(story),
+        labels: story_labels(story).colorize(:blue),
         started: story_state_sign(story)
       }
       if long
@@ -125,7 +125,7 @@ module PivoFlow
         Description:  %{description}
         Estimate:     %{estimate}" % vars
       else
-        "[#%{story_id}] (%{started}) %{story_type} [%{estimate} pts.] %{owner} %{name}".colorize(story_color(story)) % vars
+        "[#%{story_id}] (%{started}) %{story_type} [%{estimate} pts.] %{owner} %{name} %{labels}".colorize(story_color(story)) % vars
       end
     end
 

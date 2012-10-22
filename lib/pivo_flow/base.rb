@@ -43,7 +43,7 @@ module PivoFlow
     end
 
     def pf_git_hook_valid?
-      File.executable?(@pf_git_hook_path) && File.read(@pf_git_hook_path).match(File.read(@pf_git_hook_local_path))
+      File.executable?(@pf_git_hook_path) && FileUtils.compare_file(@pf_git_hook_path, @pf_git_hook_local_path)
     end
 
     def git_directory_present?

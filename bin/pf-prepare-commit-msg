@@ -8,7 +8,7 @@ if File.exists?(story_path)
     unless commit_msg.include?($1) or commit_msg =~ /Merge branch/
       File.open(ARGV[0], 'w') do |file|
         file.print commit_msg
-        file.print "[##{$1}]"
+        file.print "[##{story_id}]"
       end
     end
   end

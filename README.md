@@ -15,7 +15,7 @@ Install it yourself as:
 All the required information is gathered on demand, but it's a good idea to prepare:
 
 * project's Pivotal Tracker ID
-* your Pivotal Tracker API token
+* your Pivotal Tracker API token (see here https://www.pivotaltracker.com/profile#api)
   * when project's ID is strictly connected with one project, API-token is for all the projects, so the best solution would be to add it globally to git config:
 
   `git config --global pivo-flow.pivotal-token YOUR_PIVOTAL_API_TOKEN`

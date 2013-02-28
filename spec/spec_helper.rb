@@ -1,6 +1,6 @@
-require 'simplecov'
+require 'coveralls'
+Coveralls.wear!
 
-SimpleCov.start
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'pivo_flow'

@@ -1,5 +1,6 @@
 # PivoFlow
 
+[![Code Climate](https://codeclimate.com/github/lubieniebieski/pivo_flow.png)](https://codeclimate.com/github/lubieniebieski/pivo_flow)
 [![Build Status](https://secure.travis-ci.org/lubieniebieski/pivo_flow.png?branch=master)](http://travis-ci.org/lubieniebieski/pivo_flow)
 
 PivoFlow let's you choose the story from Pivotal Tracker you are currently working on. Intended for all the people, who doesn't like feature-branch approach or are "merdżuj - nie pier*ol"-theory enthusiasts.
@@ -15,7 +16,7 @@ Install it yourself as:
 All the required information is gathered on demand, but it's a good idea to prepare:
 
 * project's Pivotal Tracker ID
-* your Pivotal Tracker API token
+* your Pivotal Tracker API token (see here https://www.pivotaltracker.com/profile#api)
   * when project's ID is strictly connected with one project, API-token is for all the projects, so the best solution would be to add it globally to git config:
 
   `git config --global pivo-flow.pivotal-token YOUR_PIVOTAL_API_TOKEN`

@@ -58,7 +58,7 @@ module PivoFlow
         menu.prompt = "story no.? "
         menu.select_by = :index
         stories.each do |story|
-          menu.choice(story_string(story)) { |answer| show_story(answer.match(/\[#(?<id>\d+)\]/)[:id])}
+          menu.choice(story_string(story).fix_encoding) { |answer| show_story(answer.match(/\[#(?<id>\d+)\]/)[:id])}
         end
         menu.choice("Show all") { show_stories(100) }
       end
@@ -169,12 +169,9 @@ module PivoFlow
     end
 
     def story_type_icon story
-      case story.story_type
-        when "feature" then "☆"
-        when "bug" then "☠"
-        when "chore" then "✙"
-        else "☺"
-      end
+      type = story.story_type
+      space_count = 7 - type.length
+      type + " " * space_count
     end
 
     def truncate string

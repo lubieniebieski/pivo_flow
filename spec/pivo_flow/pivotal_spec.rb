@@ -13,13 +13,13 @@ describe PivoFlow::Pivotal do
   describe "raises exception" do
     it "when project id is incorrect" do
       VCR.use_cassette(:pivotal_fetch_project_not_found) do
-        expect{pivotal.run}.to raise_error(PivoFlow::Errors::UnsuccessfulPivotalConnection)
+        expect{pivotal.fetch_stories}.to raise_error(PivoFlow::Errors::UnsuccessfulPivotalConnection)
       end
     end
 
     it "when api-token is incorrect (unauthorized)" do
       VCR.use_cassette(:pivotal_fetch_project_unauthorized) do
-        expect{pivotal.run}.to raise_error(PivoFlow::Errors::UnsuccessfulPivotalConnection)
+        expect{pivotal.fetch_stories}.to raise_error(PivoFlow::Errors::UnsuccessfulPivotalConnection)
       end
     end
 
@@ -32,8 +32,18 @@ describe PivoFlow::Pivotal do
       pivotal.run
     end
 
-    it "fetches with correct id" do
-      pivotal.options[:project].id.should eq 123456
+    it "does not call pivotal upon run" do
+      pivotal.options[:project].should be_nil
+    end
+
+    it "calls pivotal when necessary" do
+      pivotal.should_receive(:ensure_project).once
+      pivotal.fetch_stories
+    end
+
+    it "does not call pivotal twice" do
+      PivotalTracker::Project.should_receive(:find).once
+      2.times { pivotal.fetch_stories }
     end
 
     it "user_stories takes only stories owned by current user" do

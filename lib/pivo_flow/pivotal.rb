@@ -8,15 +8,17 @@ module PivoFlow
 
       PivotalTracker::Client.token = @options["api-token"]
       PivotalTracker::Client.use_ssl = true
+    end
 
+    def ensure_project(&block)
       begin
         @options[:project] ||= PivotalTracker::Project.find(@options["project-id"])
+        block.call
       rescue Exception => e
         message = "Pivotal Tracker: #{e.message}\n" +
         "[TIPS] It means that your configuration is wrong. You can reset your settings by running:\n\tpf reconfig"
         raise PivoFlow::Errors::UnsuccessfulPivotalConnection, message
       end
-
     end
 
     def user_stories
@@ -251,8 +253,10 @@ module PivoFlow
     end
 
     def fetch_stories(count = 100, state = "unstarted,started,unscheduled,rejected", story_type = "feature,chore,bug")
-      conditions = { current_state: state, limit: count, story_type: story_type }
-      @options[:stories] = @options[:project].stories.all(conditions)
+      ensure_project do 
+        conditions = { current_state: state, limit: count, story_type: story_type }
+        @options[:stories] = @options[:project].stories.all(conditions)
+      end
     end
 
   end

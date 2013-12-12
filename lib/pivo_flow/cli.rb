@@ -27,6 +27,15 @@ module PivoFlow
       pivotal_object.show_stories
     end
 
+    def set story_id=nil
+      unless story_id
+        puts "Ok, but which story?"
+        return 1
+      end
+      pivotal_object.save_story_id_to_file story_id
+      puts "Story ##{story_id} set as current"
+    end
+
     def start story_id=nil
       unless story_id
         puts "Ok, but which story?"
@@ -109,7 +118,8 @@ module PivoFlow
         opts.separator  "     finish [STORY_ID] finish story on Pivotal"
         opts.separator  "     info              show info about current story"
         opts.separator  "     reconfig          clear API_TOKEN and PROJECT_ID from git config and setup new values"
-        opts.separator  "     start <STORY_ID>  start a story of given ID"
+        opts.separator  "     start <STORY_ID>  start a story of given ID (update in Pivotal)"
+        opts.separator  "     set <STORY_ID>    set a story of given ID locally (do not update Pivotal)"
         opts.separator  "     stories           list stories for current project"
         opts.separator  "     version           show gem version"
         opts.separator  ""
@@ -138,7 +148,7 @@ module PivoFlow
       opt_parser.parse!(args)
 
       case args[0]
-      when "start", "finish"
+      when "start", "finish", "set"
         self.send(args[0].to_sym, args[1])
       when "help"
         puts opt_parser

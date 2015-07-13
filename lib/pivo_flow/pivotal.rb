@@ -1,6 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'pry'
-
 module PivoFlow
   class Pivotal < Base
     def run

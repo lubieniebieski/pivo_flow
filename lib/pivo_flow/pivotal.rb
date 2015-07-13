@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'pry'
+
 module PivoFlow
   class Pivotal < Base
     def run
@@ -226,6 +228,19 @@ module PivoFlow
       end
     end
 
+    def create_branch story_id
+      story = find_story(story_id)
+      if story.nil?
+        puts "Sorry, this story is not found (#{story_id})"
+        return
+      end
+
+      ticket_name = story.name.tr('^A-Za-z0-9 ', '').tr(' ', '-')
+      branch_name = [story.id, ticket_name].join("-")
+
+      git_create_branch(branch_name)
+    end
+
     def start_story story_id
       update_story(story_id, :started)
     end
@@ -259,5 +274,8 @@ module PivoFlow
       end
     end
 
+    def git_create_branch(name)
+      system("git checkout -b #{name}")
+    end
   end
 end

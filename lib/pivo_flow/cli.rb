@@ -66,6 +66,15 @@ module PivoFlow
       end
     end
 
+    def branch
+      unless current_story_id
+        puts no_story_found_message
+        return 1
+      end
+
+      pivotal_object.create_branch(current_story_id)
+    end
+
     def current
       puts current_story_id || no_story_found_message
     end
@@ -111,6 +120,7 @@ module PivoFlow
       opt_parser = OptionParser.new do |opts|
         opts.banner =   "\nPivoFlow ver. #{PivoFlow::VERSION}\nUsage: pf <COMMAND> [OPTIONS]\n"
         opts.separator  "Commands"
+        opts.separator  "     branch            create git branch locally based on current set ticket using 'info' command"
         opts.separator  "     clear             clear STORY_ID from temp file"
         opts.separator  "     current           show STORY_ID from temp file"
         opts.separator  "     deliver           show finished stories and mark selected as delivered in Pivotal Tracker"
@@ -152,7 +162,7 @@ module PivoFlow
         self.send(args[0].to_sym, args[1])
       when "help"
         puts opt_parser
-      when "clear", "current", "deliver", "info", "reconfig", "stories"
+      when "clear", "current", "deliver", "info", "reconfig", "stories", "branch"
         self.send(args[0].to_sym)
       when nil
         no_method_error

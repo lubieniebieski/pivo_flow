@@ -1,8 +1,8 @@
 module PivoFlow
   class Cli
+    include PivoFlow::State
 
     def initialize *args
-      @file_story_path = File.join(Dir.pwd, "/tmp/.pivotal_story_id")
       @args = args
     end
 
@@ -58,7 +58,7 @@ module PivoFlow
 
     def clear
       unless current_story_id.nil?
-        FileUtils.remove_file(@file_story_path)
+        FileUtils.remove_file(current_story_id_file_path)
         puts "Current pivotal story id cleared."
       else
         puts no_story_found_message
@@ -98,7 +98,7 @@ module PivoFlow
     end
 
     def no_story_found_message
-      "No story found in #{@file_story_path}"
+      "No story found in #{current_story_id_file_path}"
     end
 
     def no_method_error
@@ -107,11 +107,6 @@ module PivoFlow
 
     def invalid_method_error
       puts "Ups, no such method..."
-    end
-
-    def current_story_id
-      return nil unless File.exists?(@file_story_path)
-      File.open(@file_story_path).read.strip
     end
 
     def parse_argv(args)

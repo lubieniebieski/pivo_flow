@@ -28,5 +28,11 @@ describe PivoFlow::State do
     it "should read it from the tmp file" do
       expect(PivoFlow::State.current_story_id).to eq("123456")
     end
+
+    it "should return nil if there's no file for it yet" do
+      allow(PivoFlow::State).to receive(:current_branch_name) { "different" }
+
+      expect(PivoFlow::State.current_story_id).to be_nil
+    end
   end
 end

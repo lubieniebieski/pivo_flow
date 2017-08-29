@@ -3,7 +3,7 @@ module PivoFlow
     extend self
 
     def current_branch_name
-      `git symbolic-ref HEAD 2>/dev/null | cut -d '/' -f3`.strip
+      Grit::Repo.new(Dir.pwd).head.name
     end
 
     def story_id_tmp_path
@@ -15,6 +15,8 @@ module PivoFlow
     end
 
     def current_story_id
+      return nil unless File.exist?(current_story_id_file_path)
+
       File.read(current_story_id_file_path)
     end
   end

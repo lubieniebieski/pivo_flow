@@ -18,15 +18,17 @@ module StubHelpers
       "pivo-flow.api-token" => "testtesttesttesttesttesttesttest",
       "pivo-flow.project-id" => "123456",
       "user.name" => "Adam Newman"
-    }.merge options
+    }.merge(options)
 
-    Grit::Repo.stub!(:new).and_return mock('Grit::Repo', :config => git_options)
+    allow(Grit::Repo).to receive(:new) do
+      instance_double('Grit::Repo', :config => git_options)
+    end
   end
 
   def stub_base_methods(klass)
-    klass.any_instance.stub(:git_hook_needed?).and_return(false)
-    klass.any_instance.stub(:git_directory_present?).and_return(true)
-    klass.any_instance.stub(:git_config_ok?).and_return(true)
+    allow_any_instance_of(klass).to receive(:git_hook_needed?) { false }
+    allow_any_instance_of(klass).to receive(:git_directory_present?) { true }
+    allow_any_instance_of(klass).to receive(:git_config_ok?) { true }
   end
 end
 

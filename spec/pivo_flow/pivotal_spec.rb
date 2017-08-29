@@ -6,34 +6,37 @@ describe PivoFlow::Pivotal do
 
   before do
     stub_git_config
-    PivoFlow::Pivotal.any_instance.stub(:puts)
+
+    allow_any_instance_of(PivoFlow::Pivotal).to receive(:puts)
+
     stub_base_methods(PivoFlow::Pivotal)
   end
 
   describe "raises exception" do
     it "when project id is incorrect" do
       VCR.use_cassette(:pivotal_fetch_project_not_found) do
-        expect{pivotal.fetch_stories}.to raise_error(PivoFlow::Errors::UnsuccessfulPivotalConnection)
+        expect{ pivotal.fetch_stories }.to \
+          raise_error(PivoFlow::Errors::UnsuccessfulPivotalConnection)
       end
     end
 
     it "when api-token is incorrect (unauthorized)" do
       VCR.use_cassette(:pivotal_fetch_project_unauthorized) do
-        expect{pivotal.fetch_stories}.to raise_error(PivoFlow::Errors::UnsuccessfulPivotalConnection)
+        expect{ pivotal.fetch_stories }.to \
+          raise_error(PivoFlow::Errors::UnsuccessfulPivotalConnection)
       end
     end
 
   end
 
   describe "methods" do
-
     before(:each) do
       stub_pivotal_project
       pivotal.run
     end
 
     it "does not call pivotal upon run" do
-      pivotal.options[:project].should be_nil
+      expect(pivotal.options[:project]).to be_nil
     end
 
     it "calls pivotal when necessary" do
@@ -148,9 +151,8 @@ describe PivoFlow::Pivotal do
       end
 
       it "returns true on success" do
-        pivotal.start_story(@story_feature.id).should be_true
+        pivotal.start_story(@story_feature.id).should be_truthy
       end
-
     end
 
     it "show_info returns 1 if there is no story" do
@@ -206,10 +208,11 @@ describe PivoFlow::Pivotal do
       labels: "first,second"
     )
 
-    @story_feature.stub_chain(:update).and_return(mock(errors: []))
+    @story_feature.stub_chain(:update).and_return(double(errors: []))
     @story_unassigned = PivotalTracker::Story.new(owned_by: nil, name: "test", current_state: "started")
     @story_rejected = PivotalTracker::Story.new(current_state: "rejected", owned_by: "Mark Marco", name: "test_rejected")
     @story_finished = PivotalTracker::Story.new(current_state: "finished", owned_by: "Mark Marco", name: "finished")
+
     @project.stub_chain(:stories, :all).and_return([@story_feature, @story_unassigned, @story_rejected, @story_finished])
     PivotalTracker::Project.stub(:find).and_return(@project)
   end

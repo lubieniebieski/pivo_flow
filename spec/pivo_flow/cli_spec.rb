@@ -70,7 +70,7 @@ describe PivoFlow::Cli do
 
     it "and returns story id if file exists" do
       File.stub(:exists?).and_return(true)
-      f = mock('File', :read => "123")
+      f = instance_double('File', :read => "123")
       File.stub(:open).and_return(f)
       PivoFlow::Cli.new.send(:current_story_id).should eq "123"
     end
@@ -79,7 +79,7 @@ describe PivoFlow::Cli do
   describe "finish method" do
 
     it "calls finish_story on pivotal object on finish method" do
-      pivo = mock("PivoFlow::Pivotal")
+      pivo = instance_double("PivoFlow::Pivotal")
       PivoFlow::Cli.any_instance.should_receive(:pivotal_object).and_return(pivo)
       pivo.should_receive(:finish_story).with("123")
       PivoFlow::Cli.any_instance.should_receive(:current_story_id).twice.and_return("123")

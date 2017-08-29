@@ -1,11 +1,9 @@
 # -*- encoding : utf-8 -*-
 module PivoFlow
   class Pivotal < Base
-    def run
-      @story_id_file_name = ".pivotal_story_id"
-      @story_id_tmp_path = File.join(@current_dir, "/tmp")
-      @story_id_file_path = File.join(@story_id_tmp_path, @story_id_file_name)
+    include PivoFlow::State
 
+    def run
       PivotalTracker::Client.token = @options["api-token"]
       PivotalTracker::Client.use_ssl = true
     end
@@ -228,8 +226,9 @@ module PivoFlow
 
     def create_branch story_id
       story = find_story(story_id)
+
       if story.nil?
-        puts "Sorry, this story is not found (#{story_id})"
+        puts "Sorry, this story could not be found (#{story_id})"
         return
       end
 
@@ -237,6 +236,7 @@ module PivoFlow
       branch_name = [story.id, ticket_name].join("-")
 
       git_create_branch(branch_name)
+      save_story_id_to_file(story_id)
     end
 
     def start_story story_id
@@ -252,12 +252,17 @@ module PivoFlow
     end
 
     def remove_story_id_file
-      FileUtils.remove_file(@story_id_file_path)
+      FileUtils.remove_file(current_story_id_file_path)
     end
 
     def save_story_id_to_file story_id
-      FileUtils.mkdir_p(@story_id_tmp_path)
-      File.open(@story_id_file_path, 'w') { |f| f.write(story_id) }
+      ensure_tmp_directory_exists
+
+      File.open(current_story_id_file_path, 'w') { |f| f.write(story_id) }
+    end
+
+    def ensure_tmp_directory_exists
+      FileUtils.mkdir_p(story_id_tmp_path)
     end
 
     def show_stories count=9

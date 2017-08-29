@@ -5,6 +5,7 @@ require 'highline'
 require 'fileutils'
 require 'pivotal-tracker'
 
+require 'pivo_flow/state'
 require 'pivo_flow/core_extensions'
 require 'pivo_flow/errors'
 require 'pivo_flow/version'

@@ -188,27 +188,29 @@ describe PivoFlow::Pivotal do
 
   end
 
-end
+  def stub_pivotal_project
+    @project = PivotalTracker::Project.new(id: 123456, name: "testproject")
 
-def stub_pivotal_project
-  @project = PivotalTracker::Project.new(id: 123456, name: "testproject")
-  @story_feature = PivotalTracker::Story.new(
-    id: 1,
-    url: "http://www.pivotaltracker.com/story/show/1",
-    created_at: DateTime.now,
-    project_id: 123456,
-    name: "story no 1",
-    description: "story description",
-    story_type: "feature",
-    estimate: 3,
-    current_state: "started",
-    requested_by: "Paul Newman",
-    owned_by: "Adam Newman",
-    labels: "first,second")
-  @story_feature.stub_chain(:update).and_return(mock(errors: []))
-  @story_unassigned = PivotalTracker::Story.new(owned_by: nil, name: "test", current_state: "started")
-  @story_rejected = PivotalTracker::Story.new(current_state: "rejected", owned_by: "Mark Marco", name: "test_rejected")
-  @story_finished = PivotalTracker::Story.new(current_state: "finished", owned_by: "Mark Marco", name: "finished")
-  @project.stub_chain(:stories, :all).and_return([@story_feature, @story_unassigned, @story_rejected, @story_finished])
-  PivotalTracker::Project.stub(:find).and_return(@project)
+    @story_feature = PivotalTracker::Story.new(
+      id: 1,
+      url: "http://www.pivotaltracker.com/story/show/1",
+      created_at: DateTime.now,
+      project_id: 123456,
+      name: "story no 1",
+      description: "story description",
+      story_type: "feature",
+      estimate: 3,
+      current_state: "started",
+      requested_by: "Paul Newman",
+      owned_by: "Adam Newman",
+      labels: "first,second"
+    )
+
+    @story_feature.stub_chain(:update).and_return(mock(errors: []))
+    @story_unassigned = PivotalTracker::Story.new(owned_by: nil, name: "test", current_state: "started")
+    @story_rejected = PivotalTracker::Story.new(current_state: "rejected", owned_by: "Mark Marco", name: "test_rejected")
+    @story_finished = PivotalTracker::Story.new(current_state: "finished", owned_by: "Mark Marco", name: "finished")
+    @project.stub_chain(:stories, :all).and_return([@story_feature, @story_unassigned, @story_rejected, @story_finished])
+    PivotalTracker::Project.stub(:find).and_return(@project)
+  end
 end

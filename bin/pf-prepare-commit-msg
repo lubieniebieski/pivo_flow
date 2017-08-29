@@ -3,7 +3,7 @@
 branch_name = `git symbolic-ref HEAD 2>/dev/null | cut -d '/' -f3`.strip
 story_path = "tmp/.pivo_flow/stories/#{branch_name}"
 
-if File.exists?(story_path)
+if !branch_name.empty? && File.exists?(story_path)
   story_id = File.read(story_path).strip
 
   if story_id =~ /(\d{7,})/

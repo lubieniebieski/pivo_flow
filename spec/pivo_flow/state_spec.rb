@@ -8,13 +8,13 @@ describe PivoFlow::State do
 
     it "should return a path to a branch-based file name" do
       expect(PivoFlow::State.current_story_id_file_path).to eq(
-        ".tmp/pivo_flow/stories/cool-branch"
+        "#{Dir.pwd}/tmp/.pivo_flow/stories/cool-branch"
       )
     end
   end
 
   describe "#current_story_id" do
-    let(:tmp_file) { ".tmp/pivo_flow/stories/cool-branch" }
+    let(:tmp_file) { "#{Dir.pwd}/tmp/.pivo_flow/stories/cool-branch" }
 
     before do
       allow(PivoFlow::State).to receive(:current_branch_name) { "cool-branch" }

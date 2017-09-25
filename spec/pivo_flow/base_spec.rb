@@ -37,13 +37,13 @@ describe PivoFlow::Base do
 
     it "creates an executable prepare-commit-msg file" do
       base.install_git_hook
-      File.executable?(file_name).should be_truthy
+      expect(File.executable?(file_name)).to be_truthy
     end
 
     it "creates an executable pf-prepare-commit-msg file" do
       File.delete pf_file_name if File.exists? pf_file_name
       base.install_git_hook
-      File.executable?(pf_file_name).should be_truthy
+      expect(File.executable?(pf_file_name)).to be_truthy
     end
 
   end
@@ -51,15 +51,15 @@ describe PivoFlow::Base do
   describe "parses git config" do
 
     it "and returns project id" do
-      base.options["project-id"].should eq "123456"
+      expect(base.options["project-id"]).to eq "123456"
     end
 
     it "and returns api token" do
-      base.options["api-token"].should eq "testtesttesttesttesttesttesttest"
+      expect(base.options["api-token"]).to eq "testtesttesttesttesttesttesttest"
     end
 
     it "returns user name" do
-      base.user_name.should eq "Adam Newman"
+      expect(base.user_name).to eq "Adam Newman"
     end
 
   end
@@ -79,7 +79,7 @@ describe PivoFlow::Base do
       it "changes #{key} value" do
         allow_any_instance_of(PivoFlow::Base).to receive(:ask_question).and_return(key)
         new_key = key.split(".").last
-        base.options[new_key].should eq key
+        expect(base.options[new_key]).to eq key
       end
     end
   end

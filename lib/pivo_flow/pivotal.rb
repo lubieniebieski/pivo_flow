@@ -256,13 +256,8 @@ module PivoFlow
     end
 
     def save_story_id_to_file story_id
-      ensure_tmp_directory_exists
-
-      File.open(current_story_id_file_path, 'w') { |f| f.write(story_id) }
-    end
-
-    def ensure_tmp_directory_exists
       FileUtils.mkdir_p(story_id_tmp_path)
+      File.open(current_story_id_file_path, 'w') { |f| f.write(story_id) }
     end
 
     def show_stories count=9

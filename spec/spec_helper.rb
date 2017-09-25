@@ -21,7 +21,7 @@ module StubHelpers
     }.merge(options)
 
     allow(Grit::Repo).to receive(:new) do
-      instance_double('Grit::Repo', :config => git_options)
+      instance_double('Grit::Repo', config: git_options)
     end
   end
 

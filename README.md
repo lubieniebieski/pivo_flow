@@ -1,7 +1,7 @@
 # PivoFlow
 
-[![Code Climate](https://codeclimate.com/github/lubieniebieski/pivo_flow.png)](https://codeclimate.com/github/lubieniebieski/pivo_flow)
-[![Build Status](https://secure.travis-ci.org/lubieniebieski/pivo_flow.png?branch=master)](http://travis-ci.org/lubieniebieski/pivo_flow)
+[![](http://img.shields.io/codeclimate/github/lubieniebieski/pivo_flow.svg?style=flat-square)](https://codeclimate.com/github/lubieniebieski/pivo_flow)
+[![](https://img.shields.io/circleci/project/github/lubieniebieski/pivo_flow.svg?style=flat-square)](https://circleci.com/gh/lubieniebieski/pivo_flow)
 
 PivoFlow lets you choose the story you are currently working on from Pivotal Tracker. Intended for all the people, who doesn't like feature-branch approach or are "merdżuj - nie pier*ol"-theory enthusiasts.
 

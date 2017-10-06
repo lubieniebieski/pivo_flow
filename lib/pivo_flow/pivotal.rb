@@ -232,8 +232,12 @@ module PivoFlow
         return
       end
 
-      ticket_name = story.name.tr('^A-Za-z0-9 ', '').tr(' ', '-')
-      branch_name = [story.id, ticket_name].join("-")
+      ticket_name = story.name
+        .tr('^A-Za-z0-9 ', '')
+        .tr(' ', '-')
+        .downcase
+
+      branch_name = [ticket_name, story.id].join("-")
 
       git_create_branch(branch_name)
       save_story_id_to_file(story_id)

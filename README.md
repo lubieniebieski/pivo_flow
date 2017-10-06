@@ -61,42 +61,9 @@ Show current STORY_ID from temp file
 
 This gem installs a `pepare-commit-msg` hook by adding a reference to `pf-prepare-commit-msg` file. In short: you shouldn't be worried about your own `prepare-commit-msg` hook, the one added by `pivo_flow` will be added in the last line of original hook file.
 
-## Roadmap
-### 0.6 Current release
+## Changelog
 
-* create local branch of the current ticket using its id and name with 'pf branch'
-
-### 0.5
-
-* set ticket id without connecting to pivotal with 'pf set NUMBER'
-
-### 0.4
-
-* colorized output
-* **TODO** story statistics
-* **TODO** git statistics (number of commits in some peroid, average, etc.)
-
-### 0.3
-
-* single-story view with comments and tasks
-* flow:
-  * select story
-  * read the story description
-  * accept or back to story selection
-* `pf info` displaying info about current task
-* `pf deliver` ability to deliver finished stories [#6]
-* options via `OptionParser`
-
-### 0.2
-
-* git hook
-* formatted output
-* bugfixes
-
-### before 0.2
-
-* gem basic structure
-* git config read/write
+See [CHANGELOG.md](https://github.com/lubieniebieski/pivo_flow/blob/master/CHANGELOG.md) file
 
 ## Contributing
 

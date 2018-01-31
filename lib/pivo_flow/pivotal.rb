@@ -224,6 +224,8 @@ module PivoFlow
       end
     end
 
+    MAX_BRANCH_NAME_LENGTH = 50
+
     def create_branch story_id
       story = find_story(story_id)
 
@@ -232,10 +234,11 @@ module PivoFlow
         return
       end
 
-      ticket_name = story.name
+      ticket_name = story
+        .name
         .tr('^A-Za-z0-9 ', '')
         .tr(' ', '-')
-        .downcase
+        .downcase[0...MAX_BRANCH_NAME_LENGTH]
 
       branch_name = [ticket_name, story.id].join("-")
 

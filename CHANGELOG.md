@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+# 0.8 - 2018-12-29
+
+## Fixed
+
+* [Fix branches that have slashes in them](https://github.com/lubieniebieski/pivo_flow/pull/28)
+
 # 0.7 - 2017-10-06
 
 Thanks [David Balatero](https://github.com/dbalatero) for your help with this
